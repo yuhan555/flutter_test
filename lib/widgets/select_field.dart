@@ -5,7 +5,7 @@ import 'dart:math' as math;
 class SelectField extends StatefulWidget {
   final double? width; //欄位寬，可給可不給
   final List items; //下拉選項 (ex:[['跑步', 'Running'],['爬山', 'Climbing']]  or  [['跑步'],['爬山']])
-  final String? value;
+  final String value;
   final Function? onChanged; //change時觸發
   final String? label; //輸入欄位label
   final String hint; //輸入欄位提示文字
@@ -25,7 +25,7 @@ class SelectField extends StatefulWidget {
       {Key? key,
         this.width,
         this.items = const [],
-        this.value,
+        this.value = '',
         this.onChanged,
         this.label,
         this.hint = '',
@@ -65,7 +65,7 @@ class SelectFieldWidgetState extends State<SelectField> {
         child: Stack(
           children: <Widget>[
             DropDownFormField(
-              titleText: widget.label,
+              titleText: widget.label!,
               hintText: widget.hint,
               onChanged: widget.enable ? (v){
                 FocusScope.of(context)
@@ -76,7 +76,7 @@ class SelectFieldWidgetState extends State<SelectField> {
                 }
                 widget.onChanged!(v);
               } : null,
-              value: widget.items.isNotEmpty?widget.controller!=null ? widget.controller!.text : widget.value:'',
+              value: widget.items.isNotEmpty?widget.controller!=null ? widget.controller!.text : widget.value :'',
               dataSource: widget.items,
               enable: widget.enable,
               searchHintText: widget.searchHint,
@@ -142,7 +142,7 @@ class DropDownFormField extends FormField<dynamic> {
   final bool hideClearIcon;
 
   DropDownFormField(
-      { Key? key,
+      {Key? key,
         FormFieldSetter<dynamic>? onSaved,
         FormFieldValidator<dynamic>? validator,
         bool autoValidate = false,
@@ -156,7 +156,7 @@ class DropDownFormField extends FormField<dynamic> {
         this.showLabel,
         this.whiteBg = false,
         this.hideClearIcon = false})
-      : super(
+      : super(key: key,
     onSaved: onSaved,
     validator: validator,
     builder: (FormFieldState<dynamic> state) {
@@ -283,25 +283,25 @@ Widget prepareWidget(dynamic object,
     if (stringToWidgetFunction == null) {
       return (Text(object));
     } else {
-      return (stringToWidgetFunction!(object)!)!;
+      return (stringToWidgetFunction(object));
     }
   }
   if (object is Function) {
     if (parameter is NotGiven) {
       if (context == null) {
-        return (prepareWidget!(object()!,
-            stringToWidgetFunction: stringToWidgetFunction!)!)!;
+        return (prepareWidget(object(),
+            stringToWidgetFunction: stringToWidgetFunction));
       } else {
-        return (prepareWidget!(object(context)!,
-            stringToWidgetFunction: stringToWidgetFunction!)!)!;
+        return (prepareWidget(object(context)!,
+            stringToWidgetFunction: stringToWidgetFunction));
       }
     }
     if (context == null) {
-      return (prepareWidget!(object(parameter)!,
-          stringToWidgetFunction: stringToWidgetFunction!)!)!;
+      return (prepareWidget(object(parameter),
+          stringToWidgetFunction: stringToWidgetFunction));
     }
-    return (prepareWidget!(object(parameter, context)!,
-        stringToWidgetFunction: stringToWidgetFunction!)!)!;
+    return (prepareWidget(object(parameter, context)!,
+        stringToWidgetFunction: stringToWidgetFunction));
   }
   return (Text("Unknown type: ${object.runtimeType.toString()}"));
 }
@@ -409,10 +409,10 @@ class SearchableDropdown<T> extends StatefulWidget {
     bool showLabel = false,
   }) {
     return (SearchableDropdown._(
-      key: key!,
+      key: key,
       items: items!,
       onChanged: onChanged!,
-      value: value!,
+      value: value as T,
       style: style!,
       searchHint: searchHint,
       hint: hint,
@@ -628,7 +628,7 @@ class SearchableDropdown<T> extends StatefulWidget {
         super(key: key);
 
   @override
-  _SearchableDropdownState<T> createState() => new _SearchableDropdownState();
+  _SearchableDropdownState<T> createState() => _SearchableDropdownState();
 }
 
 class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
@@ -748,7 +748,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
   Widget get menuWidget {
     return (DropdownDialog(
       items: widget.items!,
-      hint: prepareWidget!(widget.searchHint!)!,
+      hint: prepareWidget(widget.searchHint!),
       isCaseSensitiveSearch: widget.isCaseSensitiveSearch,
       closeButton: widget.closeButton,
       keyboardType: widget.keyboardType,
@@ -781,9 +781,9 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     if (widget.hint != null ||
         (!_enabled && prepareWidget(widget.disabledHint) != null)) {
       final Widget emplacedHint = _enabled
-          ? prepareWidget!(widget.hint!)!
-          : widget.isButton! ||(widget.items!.length==0 && widget.onChanged!=null)?prepareWidget!(widget.disabledHint!??widget.hint!)!:DropdownMenuItem<Widget>(
-          child: prepareWidget!(widget.disabledHint!)!)!;
+          ? prepareWidget(widget.hint!)
+          : widget.isButton! ||(widget.items!.length==0 && widget.onChanged!=null)?prepareWidget(widget.disabledHint!??widget.hint!):DropdownMenuItem<Widget>(
+          child: prepareWidget(widget.disabledHint));
       hintIndex = items.length;
       items.add(DefaultTextStyle(
         style: _textStyle.copyWith(color: Theme.of(context).hintColor),
@@ -796,7 +796,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     Widget innerItemsWidget;
     List<Widget> list = [];
     if(widget.items!.isEmpty) selectedItems.clear();
-    selectedItems?.forEach((item) {
+    selectedItems.forEach((item) {
       list.add(widget.selectedValueWidgetFn != null
           ? widget.selectedValueWidgetFn!(widget.items![item])
           : items[item]);
@@ -844,8 +844,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
                 color: _iconColor,
                 size: widget.iconSize,
               ),
-              child: prepareWidget(widget.icon, parameter: selectedResult) ??
-                  SizedBox.shrink(),
+              child: prepareWidget(widget.icon, parameter: selectedResult)
             ),
           ],
         ));
@@ -881,7 +880,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
                             : _disabledIconColor,
                         size: widget.iconSize,
                       ),
-                      child: widget.clearIcon!,
+                      child: widget.clearIcon,
                     ),
                   ],
                 ),
@@ -916,7 +915,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        labelOutput ?? const SizedBox.shrink(),
+        labelOutput,
         Stack(
           children: <Widget>[
             Padding(
@@ -930,17 +929,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
               right: 0.0,
               bottom: bottom,
               child: prepareWidget(widget.underline,
-                  parameter: selectedResult) ??
-                  Container(
-                    height: 1.0,
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: valid
-                                    ? Color(0xFFBDBDBD)
-                                    : Colors.red,
-                                width: 0.0))),
-                  ),
+                  parameter: selectedResult)
             ),
           ],
         ),
@@ -1024,7 +1013,7 @@ class _DropdownDialogState<T> extends State<DropdownDialog> {
     return (widget.multipleSelection!
         ? widget.selectedItems!
         : widget.selectedItems?.isNotEmpty ?? false
-        ? widget.items![widget.selectedItems!.first]!.value
+        ? widget.items![widget.selectedItems!.first].value
         : null);
   }
 
@@ -1035,7 +1024,7 @@ class _DropdownDialogState<T> extends State<DropdownDialog> {
   @override
   void initState() {
     if (widget.searchFn != null) {
-      searchFn = widget.searchFn;
+      searchFn = widget.searchFn!;
     } else {
       Function matchFn;
       if (widget.isCaseSensitiveSearch) {
@@ -1126,8 +1115,8 @@ class _DropdownDialogState<T> extends State<DropdownDialog> {
 
     Widget doneButtonWidget =
     widget.multipleSelection! || widget.doneButton != null
-        ? prepareWidget!(widget.doneButton!,
-        parameter: selectedResult,
+        ? prepareWidget(widget.doneButton,
+        parameter: selectedResult!,
         context: context, stringToWidgetFunction: (string) {
           return (FlatButton.icon(
               onPressed: !valid
@@ -1138,7 +1127,7 @@ class _DropdownDialogState<T> extends State<DropdownDialog> {
               },
               icon: Icon(Icons.close),
               label: Text(string)));
-        })!
+        })
         : SizedBox.shrink();
     return widget.hint != null
         ?  Container(
@@ -1146,7 +1135,7 @@ class _DropdownDialogState<T> extends State<DropdownDialog> {
       child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            prepareWidget!(widget.hint!)!,
+            prepareWidget(widget.hint!),
             Column(
               children: <Widget>[doneButtonWidget, validatorOutputWidget],
             ),
@@ -1283,7 +1272,7 @@ class _DropdownDialogState<T> extends State<DropdownDialog> {
   }
 
   Widget closeButtonWrapper() {
-    return (prepareWidget(widget.closeButton, parameter: selectedResult,
+    return (prepareWidget(widget.closeButton, parameter: selectedResult!,
         stringToWidgetFunction: (string) {
           return (Container(
             child: Row(
@@ -1306,7 +1295,6 @@ class _DropdownDialogState<T> extends State<DropdownDialog> {
               ],
             ),
           ));
-        }) ??
-        SizedBox.shrink());
+        }));
   }
 }
