@@ -7,46 +7,54 @@ part 'test_event.dart';
 part 'test_state.dart';
 
 class TestBloc extends Bloc<TestEvent, TestState> {
-  // TestBloc() : super(TestInitial()) {
-  //   on<TestEvent>((event, emit) {
-  //     // TODO: implement event handler
-  //   });
-  // }
+  TestBloc() : super(TestInitial()) {
+    on<InitData>(_mapInitDataToState);
+    on<ClickPage>(_mapClickPageToState);
+  }
   BookMarkType nowPage = BookMarkType.ContractChange;
 
-  TestBloc() : super(TestInitial());
+  // TestBloc() : super(TestInitial());
 
-  TestState get initialState => TestInitial();
+  // TestState get initialState => TestInitial();
 
 
   ///Stream
-  Stream<TestState> mapEventToState(TestEvent event) async* {
-    if(event is InitData){
-      yield* _mapInitDataToState();
-    }else if(event is ClickPage){
-      yield* _mapClickPageToState(event);
-    }
+  // Stream<TestState> mapEventToState(TestEvent event) async* {
+  //   if(event is InitData){
+  //     yield* _mapInitDataToState();
+  //   }else if(event is ClickPage){
+  //     yield* _mapClickPageToState(event);
+  //   }
+  // }
+
+
+
+
+
+
+
+
+  void  _mapInitDataToState(InitData event, Emitter emit) async{
+    emit(ActivePage(bookMark:nowPage ));
   }
 
+  // Stream<TestState> _mapInitDataToState() async*{
+  //   yield ActivePage(bookMark: nowPage);
+  // }
 
 
-
-
-
-
-
-
-
-  Stream<TestState> _mapInitDataToState() async*{
-    yield ActivePage(bookMark: nowPage);
-  }
-
-
-  Stream<TestState> _mapClickPageToState(ClickPage event) async*{
+  void _mapClickPageToState(ClickPage event, Emitter emit) async{
     BookMarkType nextPage = event.clickNext! ? getNextPage(getRemarkTitle() ,nowPage) : event.bookMark!;
     nowPage = nextPage;
-    yield ActivePage(bookMark: nowPage);
+    emit(ActivePage(bookMark: nowPage));
   }
+
+
+  // Stream<TestState> _mapClickPageToState(ClickPage event) async*{
+  //   BookMarkType nextPage = event.clickNext! ? getNextPage(getRemarkTitle() ,nowPage) : event.bookMark!;
+  //   nowPage = nextPage;
+  //   yield ActivePage(bookMark: nowPage);
+  // }
 
 
 

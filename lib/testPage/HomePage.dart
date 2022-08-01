@@ -52,54 +52,59 @@ class _HomePageState extends State<HomePage> {
           },
           child: BlocBuilder<TestBloc,TestState>(
               builder: (BuildContext context, TestState state) {
-                return Center(
-                  child: Container(
-                      padding: const EdgeInsets.all(30),
-                      child: Row(
-                        children: [
-                          SingleChildScrollView(
-                            padding: const EdgeInsets.all(0),
-                            child: Container(
-                              width: cWidth * 0.25,
-                              child: BookMark(
-                                pageList: _testBloc.getRemarkTitle(),
-                                focusPage: _testBloc.nowPage,
-                                callback: (bookMark){
-                                  FocusScope.of(context).requestFocus(FocusNode());
-                                  Future.delayed(const Duration(milliseconds: 10), () async{
-                                    _testBloc.add(ClickPage(bookMark:bookMark));
-                                  });
-                                },
+                if(state is TestInitial){
+                  return Container();
+                }else{
+                  return Center(
+                    child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 50),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SingleChildScrollView(
+                              padding: const EdgeInsets.all(0),
+                              child: Container(
+                                width: cWidth * 0.25,
+                                child: BookMark(
+                                  pageList: _testBloc.getRemarkTitle(),
+                                  focusPage: _testBloc.nowPage,
+                                  callback: (bookMark){
+                                    FocusScope.of(context).requestFocus(FocusNode());
+                                    Future.delayed(const Duration(milliseconds: 10), () async{
+                                      _testBloc.add(ClickPage(bookMark:bookMark));
+                                    });
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                          Container(
-                            width: cWidth - cWidth * 0.25,
-                            padding: EdgeInsets.symmetric(horizontal: cWidth * 0.02),
-                            child: Column(
-                              children: [
-                                Expanded(child: showPage),
-                                Visibility(
-                                  visible: _testBloc.nowPage.showNextButton,
-                                  child: PrimaryButton(
-                                      label: '下一步',
-                                      color: const Color(0xff26aca9),
-                                      margin: const EdgeInsets.symmetric(vertical: 20),
-                                      onPressed: (){
-                                        FocusScope.of(context).requestFocus(FocusNode());
-                                        Future.delayed(const Duration(milliseconds: 10), () async{
-                                          _testBloc.add(ClickPage(clickNext: true));
-                                        });
-                                      }
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      )
-                  ),
-                );
+                            Container(
+                              width: cWidth - cWidth * 0.25,
+                              padding: EdgeInsets.symmetric(horizontal: cWidth * 0.02),
+                              child: Column(
+                                children: [
+                                  Expanded(child: showPage),
+                                  Visibility(
+                                    visible: _testBloc.nowPage.showNextButton,
+                                    child: PrimaryButton(
+                                        label: '下一步',
+                                        color: const Color(0xff26aca9),
+                                        margin: const EdgeInsets.symmetric(vertical: 20),
+                                        onPressed: (){
+                                          FocusScope.of(context).requestFocus(FocusNode());
+                                          Future.delayed(const Duration(milliseconds: 10), () async{
+                                            _testBloc.add(ClickPage(clickNext: true));
+                                          });
+                                        }
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                    ),
+                  );
+                }
               })
           ),
         )
