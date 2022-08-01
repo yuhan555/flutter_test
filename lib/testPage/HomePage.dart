@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:my_test/extension/WidgetExtension.dart';
+import 'package:my_test/testPage/ApplyCorrection.dart';
+import 'package:my_test/testPage/InsuredOwnerCorrection.dart';
+import 'package:my_test/testPage/OnlineCheck.dart';
+import 'package:my_test/testPage/Photograph.dart';
+import 'package:my_test/testPage/PolicyHolderCorrection.dart';
+import 'package:my_test/testPage/PreviewSignature.dart';
+import 'package:my_test/testPage/Upload.dart';
+import 'package:my_test/testPage/bloc/test_bloc.dart';
 import 'package:my_test/widgets/widgets.dart';
-
-import 'util/AppColors.dart';
-import 'util/AppLog.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../util/AppColors.dart';
+import '../util/AppLog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,48 +21,115 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final TestBloc _testBloc = TestBloc();
+  late Widget showPage;
+
+
+  @override
+  void initState(){
+    _testBloc.add(InitData());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final cWidth = screenSize.width;
+    final cHeight = screenSize.height;
+
     return Scaffold(
       body: GestureDetector(
         onTap:  () {
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: Center(
-          child: Container(
-              padding: const EdgeInsets.all(30),
-              child: Column(
-                children: [
-                  Expanded(
-                      child: ListView(
+        child: BlocProvider<TestBloc>(
+          create: (context) => _testBloc,
+          child: BlocListener<TestBloc,TestState>(
+              listener: (BuildContext context,TestState state){
+                if(state is ActivePage){
+                  showPage = getPageWidget(state);
+                }
+          },
+          child: BlocBuilder<TestBloc,TestState>(
+              builder: (BuildContext context, TestState state) {
+                return Center(
+                  child: Container(
+                      padding: const EdgeInsets.all(30),
+                      child: Row(
                         children: [
-                          SubCard(
-                            title: 'My Test',
+                          SingleChildScrollView(
+                            padding: const EdgeInsets.all(0),
+                            child: Container(
+                              width: cWidth * 0.25,
+                              child: BookMark(
+                                pageList: _testBloc.getRemarkTitle(),
+                                focusPage: _testBloc.nowPage,
+                                callback: (bookMark){
+                                  FocusScope.of(context).requestFocus(FocusNode());
+                                  Future.delayed(const Duration(milliseconds: 10), () async{
+                                    _testBloc.add(ClickPage(bookMark:bookMark));
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: cWidth - cWidth * 0.25,
+                            padding: EdgeInsets.symmetric(horizontal: cWidth * 0.02),
                             child: Column(
                               children: [
-                                const InsTextField(
-                                  label: "姓名",
-                                ).addBottomMargin(bottom: 20),
-                                PrimaryButton(
-                                  label: "送出",
-                                  color: Colors.redAccent,
-                                  onPressed: (){
-                                    AppLog('送出按鈕');
-                                  },
-                                ).addBottomMargin(bottom: 20),
+                                Expanded(child: showPage),
+                                Visibility(
+                                  visible: _testBloc.nowPage.showNextButton,
+                                  child: PrimaryButton(
+                                      label: '下一步',
+                                      color: const Color(0xff26aca9),
+                                      margin: const EdgeInsets.symmetric(vertical: 20),
+                                      onPressed: (){
+                                        FocusScope.of(context).requestFocus(FocusNode());
+                                        Future.delayed(const Duration(milliseconds: 10), () async{
+                                          _testBloc.add(ClickPage(clickNext: true));
+                                        });
+                                      }
+                                  ),
+                                )
                               ],
                             ),
                           )
                         ],
                       )
-                  )
-                ],
-              )
+                  ),
+                );
+              })
           ),
-        ),
+        )
       )
 
     );
+  }
+}
+
+
+Widget getPageWidget(ActivePage activePage){
+  switch (activePage.bookMark) {
+    case BookMarkType.ContractChange:
+      return ApplyCorrection();
+    case BookMarkType.EditApplication:
+      return Container();
+    case BookMarkType.InsuredOwner:
+      return InsuredOwnerCorrection();
+    case BookMarkType.PolicyHolder:
+      return PolicyHolderCorrection();
+    case BookMarkType.OnlineCheck:
+      return OnlineCheck();
+    case BookMarkType.PreviewSignature:
+      return PreviewSignature();
+    case BookMarkType.Photograph:
+      return Photograph();
+    case BookMarkType.Upload:
+      return Upload();
+    default:
+      return Container();
   }
 }
 
@@ -128,6 +203,13 @@ class BookMark extends StatefulWidget {
 }
 
 class _BookMarkState extends State<BookMark> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: List.generate(widget.pageList.length, (i) => getTitleWidget(i, widget.pageList[i])) ,
+    );
+  }
 
   int getErrCount(BookMarkType bookMarkType){
     return widget.errCountMap.containsKey(bookMarkType) ? widget.errCountMap[bookMarkType]! : 0;
@@ -293,12 +375,5 @@ class _BookMarkState extends State<BookMark> {
             doCallBack(bookMarkType);
           },
         ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: List.generate(widget.pageList.length, (i) => getTitleWidget(i, widget.pageList[i])) ,
-    );
   }
 }
