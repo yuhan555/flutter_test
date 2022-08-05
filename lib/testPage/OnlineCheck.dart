@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:my_test/widgets/widgets.dart';
 
 class OnlineCheck extends StatefulWidget {
   const OnlineCheck({Key? key}) : super(key: key);
@@ -12,6 +13,8 @@ class OnlineCheck extends StatefulWidget {
 class _OnlineCheckState extends State<OnlineCheck> {
   @override
   Widget build(BuildContext context) {
-    return Text('線上檢核');
+    return const SubCard(
+      title: '線上檢核',
+    );
   }
 }
