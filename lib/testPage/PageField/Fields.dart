@@ -40,7 +40,7 @@ class Fields{
   }
 
   setProp(FieldModel field, String attr, dynamic prop){
-    field.props[attr] = prop;
+    field.props![attr] = prop;
   }
 
 }

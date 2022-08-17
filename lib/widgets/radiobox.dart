@@ -8,9 +8,7 @@ class RadioBox extends StatefulWidget {
   final List opt;// 選項顯示文字及值，選項由左至右，ex：[['男','M'],['女','F']]
   final String? val; //欄位值
   final String errMsg; //錯誤訊息
-  final bool hasErr; //是否有錯誤
-  final VoidCallback? opt1OnPressed; //左邊選項按下後的動作
-  final VoidCallback? opt2OnPressed; //右邊選項按下後的動作
+  final Function? optPressed; //選項按下後的動作
   final bool enabled; //是否禁用
   final EdgeInsetsGeometry? margin; //欄位邊距
   final double radioWidth;//按鈕寬度
@@ -23,9 +21,7 @@ class RadioBox extends StatefulWidget {
       this.val,
       this.errMsg = '',
       this.margin,
-      this.hasErr = false,
-      this.opt1OnPressed,
-      this.opt2OnPressed,
+      this.optPressed,
       this.enabled=true,
         this.radioWidth=160})
       : super(key: key);
@@ -67,74 +63,41 @@ class RadioBoxState extends State<RadioBox> {
                 Container(
                   child: Row(
                     children: <Widget>[
-                      SizedBox(
-                          width: this.widget.radioWidth,
-                          height: 36,
-                          child: Container(
-                              child: FlatButton(
-                            color: widget.opt[0][1] == widget.val
-                                ? widget.enabled ? const Color(0xFF4D97CF) : const Color(0xFF888888)
-                                : Colors.white,
-                            highlightColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                            disabledColor: widget.opt[0][1] == widget.val
-                                ? widget.enabled ? const Color(0xFF4D97CF) : const Color(0xFF888888)
-                                : Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(6),
-                                    bottomLeft: Radius.circular(6)),
-                                side: BorderSide(
-                                  color: widget.opt[0][1] == widget.val
-                                      ? widget.enabled ? const Color(0xFF4D97CF) : const Color(0xFF888888)
-                                      : const Color(0xFF888888),
-                                )),
-                                onPressed: widget.enabled ? widget.opt1OnPressed : null,
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    widget.opt[0][0],
-                                    style: TextStyle(
-                                      color: widget.opt[0][1] == widget.val
-                                          ? Colors.white
-                                          : widget.enabled ? const Color(0xff373a3c) : const Color(0xFF888888),
-                                      fontWeight: FontWeight.w400,
-                                      fontStyle: FontStyle.normal,
-                                      letterSpacing: 0,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ),
-                          ))),
+                      for(var i in widget.opt)
                       SizedBox(
                           width: widget.radioWidth,
                           height: 36,
                           child: Container(
                               child: FlatButton(
-                            color: widget.opt[1][1] == widget.val
+                            color: i[1] == widget.val
                                 ? widget.enabled ? const Color(0xFF4D97CF) : const Color(0xFF888888)
                                 : Colors.white,
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,
-                            disabledColor: widget.opt[1][1] == widget.val
+                            disabledColor: i[1] == widget.val
                                 ? widget.enabled ? const Color(0xFF4D97CF) : const Color(0xFF888888)
                                 : Colors.white,
                             shape: RoundedRectangleBorder(
-                                borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(6),
-                                    bottomRight: Radius.circular(6)),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: i == widget.opt.first ? const Radius.circular(6) : const Radius.circular(0),
+                                    bottomLeft: i == widget.opt.first ? const Radius.circular(6) : const Radius.circular(0),
+                                    topRight: i == widget.opt.last ? const Radius.circular(6) : const Radius.circular(0),
+                                    bottomRight: i == widget.opt.last ? const Radius.circular(6) : const Radius.circular(0),
+                                ),
                                 side: BorderSide(
-                                  color: widget.opt[1][1] == widget.val
+                                  color: i[1] == widget.val
                                       ? widget.enabled ? const Color(0xFF4D97CF) : const Color(0xFF888888)
                                       : const Color(0xFF888888),
                                 )),
-                                onPressed: widget.enabled ? widget.opt2OnPressed : null,
+                                onPressed: widget.enabled ? (){
+                                  widget.optPressed!(i[1]);
+                                } : null,
                                 child: Align(
                                   alignment: Alignment.center,
                                   child: Text(
-                                    widget.opt[1][0],
+                                    i[0],
                                     style: TextStyle(
-                                      color: widget.opt[1][1] == widget.val
+                                      color: i[1] == widget.val
                                           ? Colors.white
                                           : widget.enabled ? const Color(0xff373a3c) : const Color(0xFF888888),
                                       fontWeight: FontWeight.w400,
@@ -155,7 +118,7 @@ class RadioBoxState extends State<RadioBox> {
             right: 0,
             bottom: 4,
             child: Visibility(
-              visible: widget.hasErr,
+              visible: widget.errMsg.isNotEmpty,
               child: Container(
                 color: const Color(0xFFD0021B),
                 padding: const EdgeInsets.only(top: 4, bottom: 4, left: 10, right: 10),

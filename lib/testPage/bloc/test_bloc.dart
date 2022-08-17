@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_test/testPage/HomePage.dart';
+import 'package:my_test/testPage/PageField/personalField.dart';
 
 part 'test_event.dart';
 part 'test_state.dart';
@@ -11,7 +12,11 @@ class TestBloc extends Bloc<TestEvent, TestState> {
     on<InitData>(_mapInitDataToState);
     on<ClickPage>(_mapClickPageToState);
   }
+
   BookMarkType nowPage = BookMarkType.ContractChange;
+  late PersonalField owner;
+  late PersonalField policy;
+
 
   // TestBloc() : super(TestInitial());
 
@@ -35,6 +40,8 @@ class TestBloc extends Bloc<TestEvent, TestState> {
 
 
   void  _mapInitDataToState(InitData event, Emitter emit) async{
+    owner = PersonalField(Personal.owner);
+    policy = PersonalField(Personal.policy);
     emit(ActivePage(bookMark:nowPage ));
   }
 
