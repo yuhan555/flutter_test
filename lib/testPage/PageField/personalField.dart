@@ -1,22 +1,15 @@
 import 'package:my_test/model/FieldModel.dart';
 
 class PersonalField{
-  //要保人
-  FieldModel name = FieldModel('');
-  FieldModel mobile = FieldModel('');
-  FieldModel birth = FieldModel('');
-  FieldModel sex = FieldModel('',prop: {});
+  FieldModel name = FieldModel();
+  FieldModel mobile = FieldModel();
+  FieldModel birth = FieldModel();
+  FieldModel sex = FieldModel(prop: {});
 
-  static Personal _type = Personal.owner;
-
-  static Personal get type => _type;
-
-  static set setType(Personal value) {
-    _type = value;
-  }
+  Personal type = Personal.def;
 
   PersonalField(Personal type){
-    setType = type;
+    type = type;
   }
 
 
@@ -40,4 +33,5 @@ class PersonalField{
 enum Personal{
   owner,
   policy,
+  def,
 }

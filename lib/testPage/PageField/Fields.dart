@@ -3,15 +3,15 @@ import 'package:my_test/testPage/HomePage.dart';
 
 class Fields{
   //被保人
-  FieldModel iName = FieldModel('');
-  FieldModel iMobile = FieldModel('');
-  FieldModel iBirth = FieldModel('');
-  FieldModel iSex = FieldModel('', prop:{});
+  FieldModel iName = FieldModel();
+  FieldModel iMobile = FieldModel();
+  FieldModel iBirth = FieldModel();
+  FieldModel iSex = FieldModel(prop:{});
   //要保人
-  FieldModel oName = FieldModel('');
-  FieldModel oMobile = FieldModel('');
-  FieldModel oBirth = FieldModel('');
-  FieldModel oSex = FieldModel('',prop: {});
+  FieldModel oName = FieldModel();
+  FieldModel oMobile = FieldModel();
+  FieldModel oBirth = FieldModel();
+  FieldModel oSex = FieldModel(prop: {});
 
 
   List<FieldModel> getPageField(BookMarkType page){
