@@ -42,11 +42,33 @@ class _InfoCardState extends State<InfoCard> {
                             decoration: const BoxDecoration(
                                 border: Border(right: BorderSide(color: Colors.grey))
                             ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('被保險人'),
+                                Expanded(child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  alignment: Alignment.centerRight,
+                                  child: Text('哈哈哈',textAlign: TextAlign.right,),
+                                ))
+                              ],
+                            ),
                           ),
                         ),
                         Container(
                           decoration: const BoxDecoration(
                               border: Border(right: BorderSide(color: Colors.grey))
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('被保險人'),
+                              Expanded(child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                                alignment: Alignment.centerRight,
+                                child: Text('哈哈哈',textAlign: TextAlign.right,),
+                              ))
+                            ],
                           ),
                         ),
                         Expanded(
@@ -54,11 +76,32 @@ class _InfoCardState extends State<InfoCard> {
                             decoration: const BoxDecoration(
                                 border: Border(right: BorderSide(color: Colors.grey))
                             ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('被保險人',),
+                                Expanded(child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  alignment: Alignment.centerRight,
+                                  child: Text('哈哈哈',textAlign: TextAlign.right,),
+                                ))
+                              ],
+                            ),
                           ),
                         ),
                         Expanded(
                           child:Container(
-
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('被保險人'),
+                                Expanded(child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  alignment: Alignment.centerRight,
+                                  child: Text('哈哈哈',textAlign: TextAlign.right,),
+                                ))
+                              ],
+                            ),
                           ),
                         ),
                       ],
