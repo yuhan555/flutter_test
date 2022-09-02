@@ -50,35 +50,42 @@ class _PagerCardState extends State<PagerCard> {
                   child: Column(
                     children: [
                       for(var i in pageItems)
-                        Stack(
-                          children: [
-                            Container(
-                              width: 300,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.blue),
-                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10),bottomRight: Radius.circular(10),bottomLeft: Radius.circular(10)),
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Stack(
+                            children: [
+                              Container(
+                                width: 300,
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  boxShadow: [BoxShadow(
+                                      color: AppColors.brownGreyTwo.withOpacity(0.2),
+                                      offset: const Offset(0,1),
+                                      blurRadius: 4,
+                                      spreadRadius: 0
+                                  )],
+                                ),
                               ),
-                            ),
-                            Positioned(
-                                top: 0,
-                                right: 0,
-                                child: CustomPaint(
-                                  painter: TrianglePainter(
-                                    strokeColor: Colors.yellow,
-                                    strokeWidth: 10,
-                                    paintingStyle: PaintingStyle.fill,
-                                  ),
-                                  child: Container(
-                                    padding: EdgeInsets.only(top:10,left: 70,right:10,bottom: 40),
-                                    alignment: Alignment.topRight,
-                                    child: Text(i),
-                                  ),
-                                )
-                            )
-                          ],
+                              Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: CustomPaint(
+                                    painter: TrianglePainter(
+                                      strokeColor: Colors.yellow,
+                                      strokeWidth: 10,
+                                      paintingStyle: PaintingStyle.fill,
+                                    ),
+                                    child: Container(
+                                      padding: EdgeInsets.only(top:10,left: 70,right:10,bottom: 40),
+                                      alignment: Alignment.topRight,
+                                      child: Text(i),
+                                    ),
+                                  )
+                              )
+                            ],
+                          )
                         )
-
                     ],
                   )
               ),
