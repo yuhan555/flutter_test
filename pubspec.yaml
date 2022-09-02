@@ -38,7 +38,8 @@ dependencies:
   dartx: 0.5.0
   intl: ^0.17.0
   flutter_bloc: ^8.0.1
-  pager: ^0.0.4
+  pager:
+    path: plugin/pager-main
 
 dev_dependencies:
   flutter_test:
