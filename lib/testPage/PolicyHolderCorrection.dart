@@ -43,6 +43,7 @@ class _PolicyHolderCorrectionState extends State<PolicyHolderCorrection> {
                           val: _testBloc.owner.sex.text,
                           optPressed: (v){
                             _testBloc.owner.sex.text = v;
+                            _testBloc.add(FieldChange());
                           },
                         )
                       ],

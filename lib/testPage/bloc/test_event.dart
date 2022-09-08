@@ -10,3 +10,5 @@ class ClickPage extends TestEvent{
   bool? clickNext;
   ClickPage({this.bookMark,this.clickNext = false});
 }
+
+class FieldChange extends TestEvent{}

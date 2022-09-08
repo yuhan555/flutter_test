@@ -9,3 +9,5 @@ class ActivePage extends TestState{
   BookMarkType? bookMark;
   ActivePage({this.bookMark});
 }
+
+class FieldChangeState extends TestState{}

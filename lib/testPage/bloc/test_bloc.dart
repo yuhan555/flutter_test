@@ -11,6 +11,8 @@ class TestBloc extends Bloc<TestEvent, TestState> {
   TestBloc() : super(TestInitial()) {
     on<InitData>(_mapInitDataToState);
     on<ClickPage>(_mapClickPageToState);
+    on<FieldChange>((event, emit) => emit(FieldChangeState()));
+
   }
 
   BookMarkType nowPage = BookMarkType.ContractChange;

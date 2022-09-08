@@ -43,6 +43,7 @@ class _InsuredOwnerCorrectionState extends State<InsuredOwnerCorrection> {
                         val: _testBloc.policy.sex.text,
                         optPressed: (v){
                           _testBloc.policy.sex.text = v;
+                          _testBloc.add(FieldChange());
                         },
                       )
                     ],
