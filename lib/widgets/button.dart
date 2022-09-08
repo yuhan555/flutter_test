@@ -14,18 +14,20 @@ class PrimaryButton extends StatefulWidget {
   final bool hasIcon; //是否有Icon
   final Widget? icon; //圖示
   final double fontSize; //字體大小
+  final double minWidth; //按鈕最小寬度
 
   const PrimaryButton(
       {Key? key,
-      this.label,
-      this.onPressed,
-      this.margin,
-      this.color,
-      this.enable = true,
-      this.padding = const EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
-      this.hasIcon = false,
-      this.icon,
-      this.fontSize = 20,
+        this.label,
+        this.onPressed,
+        this.margin,
+        this.color,
+        this.enable = true,
+        this.padding = const EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
+        this.hasIcon = false,
+        this.icon,
+        this.fontSize = 20,
+        this.minWidth = 160
       })
       : super(key: key);
 
@@ -43,7 +45,7 @@ class PrimaryButtonState extends State<PrimaryButton> {
     return Container(
       margin: widget.margin,
       child: ButtonTheme(
-        minWidth: 160,
+        minWidth: widget.minWidth,
         child: RaisedButton(
           onPressed: widget.enable ? widget.onPressed : null,
           textColor: const Color(0xffffffff),

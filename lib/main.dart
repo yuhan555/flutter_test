@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'CardPage/CardPage.dart';
 import 'testPage/HomePage.dart';
 
 void main() {
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: const CardPage(),
     );
   }
 }
