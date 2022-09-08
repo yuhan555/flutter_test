@@ -4,7 +4,12 @@ import 'package:my_test/widgets/widgets.dart';
 import 'package:r_dotted_line_border/r_dotted_line_border.dart';
 
 class InfoCard extends StatefulWidget {
-  const InfoCard({Key? key}) : super(key: key);
+  final dynamic data;
+
+  const InfoCard({
+    Key? key,
+    this.data,
+  }) : super(key: key);
 
   @override
   State<InfoCard> createState() => _InfoCardState();
@@ -13,6 +18,7 @@ class InfoCard extends StatefulWidget {
 class _InfoCardState extends State<InfoCard> {
   @override
   Widget build(BuildContext context) {
+    final realData = InsInfo.fromJson(widget.data);
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
@@ -72,7 +78,7 @@ class _InfoCardState extends State<InfoCard> {
                                                     child: Container(
                                                       alignment:Alignment.topRight,
                                                       padding: EdgeInsets.symmetric(horizontal: 14),
-                                                      child: Text('王大明',style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 20)),
+                                                      child: Text(realData.aName!,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 20)),
                                                     )
                                                 )
                                               ],
@@ -98,7 +104,7 @@ class _InfoCardState extends State<InfoCard> {
                                                     child: Container(
                                                       padding:  EdgeInsets.symmetric(horizontal: 14),
                                                       alignment:Alignment.topRight,
-                                                      child: Text('張美美',style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 20)),
+                                                      child: Text(realData.iName!,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 20)),
                                                     )
                                                 )
                                               ],
@@ -124,7 +130,7 @@ class _InfoCardState extends State<InfoCard> {
                                                   child: Container(
                                                     padding:  EdgeInsets.symmetric(horizontal: 14),
                                                     alignment:Alignment.topRight,
-                                                    child: Text('FI5-06 遠雄人壽好棒棒終身壽險(110)',textAlign:TextAlign.right,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 20)),
+                                                    child: Text(realData.mainIns!,textAlign:TextAlign.right,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 20)),
                                                   )
                                               )
                                             ],
@@ -143,7 +149,7 @@ class _InfoCardState extends State<InfoCard> {
                                                     child: Container(
                                                       padding:  EdgeInsets.symmetric(horizontal: 14),
                                                       alignment:Alignment.topRight,
-                                                      child: Text('500萬元',textAlign:TextAlign.right,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 20)),
+                                                      child: Text(realData.unit!,textAlign:TextAlign.right,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 20)),
                                                     )
                                                 )
                                               ],
@@ -172,8 +178,8 @@ class _InfoCardState extends State<InfoCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('異動時間：2022/07/30 10:30:22',style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold,fontSize: 22),),
-                              Text('案件編號：699ae34f8024da2',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 20),)
+                              Text('異動時間：${realData.updateDate!}',style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold,fontSize: 22),),
+                              Text('案件編號：${realData.shortId!}',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 20),)
                             ],
                           ),
                           Row(
@@ -206,7 +212,7 @@ class _InfoCardState extends State<InfoCard> {
                       height: 110,
                       alignment: Alignment.topRight,
                       padding: const EdgeInsets.only(top:16,right: 10),
-                      child: const Text('編輯中',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20,letterSpacing:1.1),),
+                      child: Text(realData.caseStatus!,style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20,letterSpacing:1.1),),
                     ),
                   )
               )
@@ -256,3 +262,34 @@ class TrianglePainter extends CustomPainter {
         oldDelegate.strokeWidth != strokeWidth;
   }
 }
+
+
+class InsInfo {
+  String? aName;
+  String? iName;
+  String? mainIns;
+  String? updateDate;
+  String? unit;
+  String? caseStatus;
+  String? shortId;
+
+  InsInfo(
+      {this.aName,
+        this.iName,
+        this.mainIns,
+        this.updateDate,
+        this.unit,
+        this.caseStatus,
+        this.shortId});
+
+  InsInfo.fromJson(Map<String, dynamic> json) {
+    aName = json['aName'] ?? '';
+    iName = json['iName'] ?? '';
+    mainIns = json['mainIns'] ?? '';
+    updateDate = json['updateDate'] ?? '';
+    unit = json['unit'] ?? '';
+    caseStatus = json['caseStatus'] ?? '';
+    shortId = json['shortId'] ?? '';
+  }
+}
+
