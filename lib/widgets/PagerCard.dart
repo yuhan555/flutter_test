@@ -40,7 +40,6 @@ class _PagerCardState extends State<PagerCard> {
       children: [
         Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(20),
             alignment: Alignment.center,
             child: Column(
               children:[
@@ -53,6 +52,7 @@ class _PagerCardState extends State<PagerCard> {
         Pager(
           currentPage: currentPage,
           totalPages: totalPages,
+          itemsPerPageText: "每頁筆數",
           onPageChanged: (page) {
             setState(() {
               currentPage = page;

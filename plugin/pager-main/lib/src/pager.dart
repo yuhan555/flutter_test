@@ -12,7 +12,7 @@ class Pager extends StatefulWidget {
     this.itemsPerPageList,
     this.pagesView = 3,
     this.currentPage = 1,
-    this.numberButtonSelectedColor = Colors.blue,
+    this.numberButtonSelectedColor = Colors.red,
     this.numberTextSelectedColor = Colors.white,
     this.numberTextUnselectedColor = Colors.black,
     this.pageChangeIconColor = Colors.grey,
@@ -81,8 +81,16 @@ class _PagerState extends State<Pager> {
   @override
   Widget build(BuildContext context) {
     pagesViewValidation();
-    return Column(
+    return Row(
       children: [
+        if (widget.showItemsPerPage)
+          ItemsPerPage(
+            itemsPerPage: widget.itemsPerPageList!,
+            onChanged: widget.onItemsPerPageChanged!,
+            itemsPerPageText: widget.itemsPerPageText,
+            itemsPerPageTextStyle: widget.itemsPerPageTextStyle,
+            dropDownMenuItemTextStyle: widget.dropDownMenuItemTextStyle,
+          ),
         Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,27 +128,34 @@ class _PagerState extends State<Pager> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 for (int i = getPageStart(getPageEnd()); i < getPageEnd(); i++)
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        widget.currentPage = i;
-                        widget.onPageChanged(widget.currentPage);
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        primary: widget.currentPage == i
-                            ? widget.numberButtonSelectedColor
-                            : null),
-                    child: Text(
-                      "$i",
-                      style: TextStyle(
-                        color: widget.currentPage == i
-                            ? widget.numberTextSelectedColor
-                            : widget.numberTextUnselectedColor,
+                  SizedBox(
+                    width: 45,
+                    height: 45,
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          widget.currentPage = i;
+                          widget.onPageChanged(widget.currentPage);
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          primary: widget.currentPage == i
+                              ? widget.numberButtonSelectedColor
+                              : null),
+                      child: Text(
+                        "$i",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: widget.currentPage == i
+                              ? widget.numberTextSelectedColor
+                              : widget.numberTextUnselectedColor,
+                        ),
                       ),
                     ),
-                  ),
+                  )
               ],
             ),
             IconButton(
@@ -175,14 +190,6 @@ class _PagerState extends State<Pager> {
             ),
           ],
         ),
-        if (widget.showItemsPerPage)
-          ItemsPerPage(
-            itemsPerPage: widget.itemsPerPageList!,
-            onChanged: widget.onItemsPerPageChanged!,
-            itemsPerPageText: widget.itemsPerPageText,
-            itemsPerPageTextStyle: widget.itemsPerPageTextStyle,
-            dropDownMenuItemTextStyle: widget.dropDownMenuItemTextStyle,
-          ),
       ],
     );
   }
