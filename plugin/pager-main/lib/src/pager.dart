@@ -126,7 +126,6 @@ class _PagerState extends State<Pager> {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 for (int i = getPageStart(getPageEnd()); i < getPageEnd(); i++)
                   SizedBox(

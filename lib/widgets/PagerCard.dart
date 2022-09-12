@@ -4,12 +4,16 @@ import 'package:my_test/widgets/InfoCard.dart';
 import 'package:my_test/widgets/widgets.dart';
 import 'package:pager/pager.dart';
 
+typedef WidgetBuilder = Widget Function(dynamic data);
+
 class PagerCard extends StatefulWidget {
   final List<dynamic> data;
+  final WidgetBuilder widgetBuilder;
 
   const PagerCard({
     Key? key,
-    this.data = const [],
+    required this.data,
+    required this.widgetBuilder,
   }): super(key: key);
 
   @override
@@ -44,7 +48,7 @@ class _PagerCardState extends State<PagerCard> {
             child: Column(
               children:[
                 for(var i in pageItems)
-                  InfoCard(data: i,)
+                  widget.widgetBuilder(i)
               ]
             )
         ),

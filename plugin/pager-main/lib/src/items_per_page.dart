@@ -42,7 +42,7 @@ class _ItemsPerPageState extends State<ItemsPerPage> {
         const SizedBox(width: 16),
         SizedBox(
           width: 60,
-          height: 40,
+          height: 35,
           child: DropdownButtonFormField(
             value: _currentValue,
             focusColor: Colors.transparent,
