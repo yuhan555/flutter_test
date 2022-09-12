@@ -21,21 +21,23 @@ class PagerCard extends StatefulWidget {
 }
 
 class _PagerCardState extends State<PagerCard> {
-  late int currentPage;
-  late int itemsPerPage;
-  List<int> pages = [5, 10, 15, 20, 25];
-  late int totalPages;
-  late int totalElements = widget.data.length;
-  late List pageItems;
-  late int pastItems;
+  late PagerModel model;
+  // late int currentPage;
+  // late int itemsPerPage;
+  // List<int> pages = [5, 10, 15, 20, 25];
+  // late int totalPages;
+  // late int totalElements = widget.data.length;
+  // late List pageItems;
+  // late int pastItems;
   @override
   void initState() {
+    model = PagerModel(widget.data);
     super.initState();
-    currentPage = 1;
-    itemsPerPage = pages.first;
-    pastItems = itemsPerPage * (currentPage-1);
-    pageItems = widget.data.sublist(pastItems,pastItems+itemsPerPage);
-    totalPages = (totalElements / itemsPerPage).ceil();
+    // currentPage = 1;
+    // itemsPerPage = pages.first;
+    // pastItems = itemsPerPage * (currentPage-1);
+    // pageItems = widget.data.sublist(pastItems,pastItems+itemsPerPage);
+    // totalPages = (totalElements / itemsPerPage).ceil();
   }
 
   @override
@@ -47,34 +49,37 @@ class _PagerCardState extends State<PagerCard> {
             alignment: Alignment.center,
             child: Column(
               children:[
-                for(var i in pageItems)
-                  widget.widgetBuilder(i)
+                for(var i in model.pageItems)
+                  GestureDetector(
+                    onTap: ()=> model.getCurrentItem(i),
+                    child: widget.widgetBuilder(i),
+                  )
               ]
             )
         ),
         const SizedBox(height: 32),
         Pager(
-          currentPage: currentPage,
-          totalPages: totalPages,
+          currentPage: model.currentPage!,
+          totalPages: model.totalPages,
           itemsPerPageText: "每頁筆數",
           onPageChanged: (page) {
             setState(() {
-              currentPage = page;
-              setPage();
+              model.currentPage = page;
+              model.setPage();
             });
           },
           showItemsPerPage: true,
           onItemsPerPageChanged: (perPage) {
             setState(() {
-              itemsPerPage = perPage;
-              totalPages = (totalElements / itemsPerPage).ceil();
-              if(currentPage>totalPages){
-                currentPage = 1;
+              model.itemsPerPage = perPage;
+              model.totalPages = (model.totalElements / model.itemsPerPage).ceil();
+              if(model.currentPage! > model.totalPages){
+                model.currentPage = 1;
               }
-              setPage();
+              model.setPage();
             });
           },
-          itemsPerPageList: pages,
+          itemsPerPageList: model.pages,
         ),
       ],
     );
@@ -82,13 +87,56 @@ class _PagerCardState extends State<PagerCard> {
 
 
 
+  // void setPage(){
+  //   pastItems = itemsPerPage * (currentPage-1);
+  //   if(totalElements % itemsPerPage > 0 && currentPage == totalPages){
+  //     pageItems = widget.data.sublist(pastItems);
+  //   }else{
+  //     pageItems = widget.data.sublist(pastItems,pastItems+itemsPerPage);
+  //   }
+  // }
+
+}
+
+class PagerModel{
+  int? currentPage;
+  List<int>? pages;
+  List<dynamic> data;
+
+  PagerModel(this.data,{this.pages = const [5, 10, 15, 20, 25], this.currentPage = 1});
+
+  late int itemsPerPage = pages!.first;
+
+  late List _pageItems = data.sublist(_pastItems,_pastItems + itemsPerPage);
+
+  late int _pastItems = itemsPerPage * (currentPage!-1);
+
+  late final int _totalElements = data.length;
+
+  late int totalPages = (_totalElements / itemsPerPage).ceil();
+
+  late dynamic _currentItem;
+
+  List get pageItems => _pageItems;
+
+  int get pastItems => _pastItems;
+
+  int get totalElements => _totalElements;
+
+  dynamic get currentItem => _currentItem;
+
   void setPage(){
-    pastItems = itemsPerPage * (currentPage-1);
+    _pastItems = itemsPerPage * (currentPage!-1);
     if(totalElements % itemsPerPage > 0 && currentPage == totalPages){
-      pageItems = widget.data.sublist(pastItems);
+      _pageItems = data.sublist(pastItems);
     }else{
-      pageItems = widget.data.sublist(pastItems,pastItems+itemsPerPage);
+      _pageItems = data.sublist(pastItems,pastItems+itemsPerPage);
     }
+  }
+
+  void getCurrentItem(data){
+    print(data);
+    _currentItem = data;
   }
 
 }

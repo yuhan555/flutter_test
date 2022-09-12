@@ -54,9 +54,7 @@ class _CardPageState extends State<CardPage> {
             width: 900,
             child: ListView(
               children: [
-                PagerCard(data: data,widgetBuilder:(i){
-                  return InfoCard(data: i);
-                },),
+                PagerCard(data: data, widgetBuilder:(d)=> InfoCard(data: d,)),
               ],
             )
           ),
