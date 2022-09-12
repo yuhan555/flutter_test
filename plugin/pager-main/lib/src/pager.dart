@@ -82,6 +82,7 @@ class _PagerState extends State<Pager> {
   Widget build(BuildContext context) {
     pagesViewValidation();
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         if (widget.showItemsPerPage)
           ItemsPerPage(
@@ -91,7 +92,7 @@ class _PagerState extends State<Pager> {
             itemsPerPageTextStyle: widget.itemsPerPageTextStyle,
             dropDownMenuItemTextStyle: widget.dropDownMenuItemTextStyle,
           ),
-        Row(
+          Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -129,8 +130,8 @@ class _PagerState extends State<Pager> {
               children: [
                 for (int i = getPageStart(getPageEnd()); i < getPageEnd(); i++)
                   SizedBox(
-                    width: 45,
-                    height: 45,
+                    width: 35,
+                    height: 35,
                     child: TextButton(
                       onPressed: () {
                         setState(() {
@@ -148,7 +149,7 @@ class _PagerState extends State<Pager> {
                       child: Text(
                         "$i",
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 16,
                           color: widget.currentPage == i
                               ? widget.numberTextSelectedColor
                               : widget.numberTextUnselectedColor,
