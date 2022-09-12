@@ -62,6 +62,7 @@ class _PagerCardState extends State<PagerCard> {
           currentPage: model.currentPage!,
           totalPages: model.totalPages,
           itemsPerPageText: "每頁筆數",
+          totalItems: model.totalElements,
           onPageChanged: (page) {
             setState(() {
               model.currentPage = page;
@@ -107,36 +108,28 @@ class PagerModel{
 
   late int itemsPerPage = pages!.first;
 
-  late List _pageItems = data.sublist(_pastItems,_pastItems + itemsPerPage);
+  late List pageItems = data.sublist(pastItems,pastItems + itemsPerPage);
 
-  late int _pastItems = itemsPerPage * (currentPage!-1);
+  late int pastItems = itemsPerPage * (currentPage!-1);
 
-  late final int _totalElements = data.length;
+  late final int totalElements = data.length;
 
-  late int totalPages = (_totalElements / itemsPerPage).ceil();
+  late int totalPages = (totalElements / itemsPerPage).ceil();
 
-  late dynamic _currentItem;
-
-  List get pageItems => _pageItems;
-
-  int get pastItems => _pastItems;
-
-  int get totalElements => _totalElements;
-
-  dynamic get currentItem => _currentItem;
+  late dynamic currentItem;
 
   void setPage(){
-    _pastItems = itemsPerPage * (currentPage!-1);
+    pastItems = itemsPerPage * (currentPage!-1);
     if(totalElements % itemsPerPage > 0 && currentPage == totalPages){
-      _pageItems = data.sublist(pastItems);
+      pageItems = data.sublist(pastItems);
     }else{
-      _pageItems = data.sublist(pastItems,pastItems+itemsPerPage);
+      pageItems = data.sublist(pastItems,pastItems+itemsPerPage);
     }
   }
 
   void getCurrentItem(data){
     print(data);
-    _currentItem = data;
+    currentItem = data;
   }
 
 }

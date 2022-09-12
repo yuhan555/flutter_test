@@ -19,6 +19,7 @@ class Pager extends StatefulWidget {
     this.itemsPerPageText,
     this.itemsPerPageTextStyle,
     this.dropDownMenuItemTextStyle,
+    this.totalItems,
   })  : assert(currentPage > 0 && totalPages > 0 && pagesView > 0,
             "Fatal Error: Make sure the currentPage, totalPages and pagesView fields are greater than zero. "),
         super(key: key) {
@@ -73,6 +74,8 @@ class Pager extends StatefulWidget {
   // DropDownButtonMenuItem text style.
   final TextStyle? dropDownMenuItemTextStyle;
 
+  final int? totalItems;
+
   @override
   State<Pager> createState() => _PagerState();
 }
@@ -85,12 +88,21 @@ class _PagerState extends State<Pager> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         if (widget.showItemsPerPage)
-          ItemsPerPage(
-            itemsPerPage: widget.itemsPerPageList!,
-            onChanged: widget.onItemsPerPageChanged!,
-            itemsPerPageText: widget.itemsPerPageText,
-            itemsPerPageTextStyle: widget.itemsPerPageTextStyle,
-            dropDownMenuItemTextStyle: widget.dropDownMenuItemTextStyle,
+          Row(
+            children: [
+              ItemsPerPage(
+                itemsPerPage: widget.itemsPerPageList!,
+                onChanged: widget.onItemsPerPageChanged!,
+                itemsPerPageText: widget.itemsPerPageText,
+                itemsPerPageTextStyle: widget.itemsPerPageTextStyle,
+                dropDownMenuItemTextStyle: widget.dropDownMenuItemTextStyle,
+              ),
+              if (widget.totalItems != null)
+               Container(
+                 margin: EdgeInsets.only(left: 30),
+                 child: Text('總筆數：${widget.totalItems} 筆'),
+               )
+            ],
           ),
           Row(
           mainAxisSize: MainAxisSize.min,
