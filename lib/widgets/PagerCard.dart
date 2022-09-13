@@ -50,8 +50,8 @@ class _PagerCardState extends State<PagerCard> {
             child: Column(
               children:[
                 for(var i in model.pageItems)
-                  GestureDetector(
-                    onTap: ()=> model.getCurrentItem(i),
+                  Listener(
+                    onPointerDown: (event)=> PagerModel.currentItem = i,
                     child: widget.widgetBuilder(i),
                   )
               ]
@@ -106,6 +106,7 @@ class PagerModel{
 
   PagerModel(this.data,{this.pages = const [5, 10, 15, 20, 25], this.currentPage = 1});
 
+
   late int itemsPerPage = pages!.first;
 
   late List pageItems = data.sublist(pastItems,pastItems + itemsPerPage);
@@ -116,7 +117,9 @@ class PagerModel{
 
   late int totalPages = (totalElements / itemsPerPage).ceil();
 
-  late dynamic currentItem;
+
+  static late dynamic currentItem;
+
 
   void setPage(){
     pastItems = itemsPerPage * (currentPage!-1);
@@ -125,11 +128,6 @@ class PagerModel{
     }else{
       pageItems = data.sublist(pastItems,pastItems+itemsPerPage);
     }
-  }
-
-  void getCurrentItem(data){
-    print(data);
-    currentItem = data;
   }
 
 }

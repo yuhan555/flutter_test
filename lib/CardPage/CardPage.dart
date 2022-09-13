@@ -51,7 +51,7 @@ class _CardPageState extends State<CardPage> {
         body: Center(
           child: Container(
             padding: EdgeInsets.all(50),
-            width: 900,
+            width: 800,
             child: ListView(
               children: [
                 PagerCard(data: data, widgetBuilder:(d)=> InfoCard(data: d,)),

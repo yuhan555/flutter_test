@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:my_test/widgets/widgets.dart';
 import 'package:r_dotted_line_border/r_dotted_line_border.dart';
 
+import 'PagerCard.dart';
+
 class InfoCard extends StatefulWidget {
   final dynamic data;
 
@@ -185,11 +187,13 @@ class _InfoCardState extends State<InfoCard> {
                           Row(
                             children: [
                               PrimaryButton(
-                                  label: '編輯',color: Colors.red,minWidth: 70,margin:EdgeInsets.only(right: 6),onPressed: (){},
+                                  label: '編輯',color: Colors.red,minWidth: 50,margin:EdgeInsets.only(right: 6),padding:EdgeInsets.only(top: 10,bottom: 10,left: 8,right: 8),onPressed: (){
+                                    print(PagerModel.currentItem);
+                              },
                               ),
-                              PrimaryButton(label: '檢視',color: Colors.grey,minWidth: 60,margin:EdgeInsets.only(right: 6)),
-                              PrimaryButton(label: '複製',color: Colors.grey,minWidth: 60,margin:EdgeInsets.only(right: 6)),
-                              PrimaryButton(label: '刪除',color: Colors.grey,minWidth: 60,),
+                              PrimaryButton(label: '檢視',color: Colors.grey,minWidth: 50,margin:EdgeInsets.only(right: 6),padding:EdgeInsets.only(top: 10,bottom: 10,left: 8,right: 8)),
+                              PrimaryButton(label: '複製',color: Colors.grey,minWidth: 50,margin:EdgeInsets.only(right: 6),padding:EdgeInsets.only(top: 10,bottom: 10,left: 8,right: 8)),
+                              PrimaryButton(label: '刪除',color: Colors.grey,minWidth: 50,padding:EdgeInsets.only(top: 10,bottom: 10,left: 8,right: 8)),
                             ],
                           )
                         ],
