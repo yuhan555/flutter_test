@@ -8,12 +8,16 @@ typedef WidgetBuilder = Widget Function(dynamic data);
 
 class PagerCard extends StatefulWidget {
   final List<dynamic> data;
-  final WidgetBuilder widgetBuilder;
+  final bool usePager;
+  final PagerModel? pagerModel;
+  // final WidgetBuilder widgetBuilder;
 
   const PagerCard({
     Key? key,
     required this.data,
-    required this.widgetBuilder,
+    this.usePager = true,
+    this.pagerModel,
+    // required this.widgetBuilder,
   }): super(key: key);
 
   @override
@@ -22,28 +26,19 @@ class PagerCard extends StatefulWidget {
 
 class _PagerCardState extends State<PagerCard> {
   late PagerModel model;
-  // late int currentPage;
-  // late int itemsPerPage;
-  // List<int> pages = [5, 10, 15, 20, 25];
-  // late int totalPages;
-  // late int totalElements = widget.data.length;
-  // late List pageItems;
-  // late int pastItems;
+
   @override
   void initState() {
-    model = PagerModel(widget.data);
+    model = widget.pagerModel ?? PagerModel();
+    model.data = widget.data;
     super.initState();
-    // currentPage = 1;
-    // itemsPerPage = pages.first;
-    // pastItems = itemsPerPage * (currentPage-1);
-    // pageItems = widget.data.sublist(pastItems,pastItems+itemsPerPage);
-    // totalPages = (totalElements / itemsPerPage).ceil();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return widget.usePager ? Column(
       children: [
+        widget.data.isNotEmpty ?
         Container(
             width: double.infinity,
             alignment: Alignment.center,
@@ -51,15 +46,15 @@ class _PagerCardState extends State<PagerCard> {
               children:[
                 for(var i in model.pageItems)
                   Listener(
-                    onPointerDown: (event)=> PagerModel.currentItem = i,
-                    child: widget.widgetBuilder(i),
+                    onPointerDown: (event)=> model.currentItem = i,
+                    child: InfoCard(data:i),
                   )
               ]
             )
-        ),
+        ) : Container(width: double.infinity,height:500,child: Center(child: Text('查無資料'),)),
         const SizedBox(height: 32),
         Pager(
-          currentPage: model.currentPage!,
+          currentPage: model.currentPage,
           totalPages: model.totalPages,
           itemsPerPageText: "每頁筆數",
           totalItems: model.totalElements,
@@ -73,56 +68,58 @@ class _PagerCardState extends State<PagerCard> {
           onItemsPerPageChanged: (perPage) {
             setState(() {
               model.itemsPerPage = perPage;
-              model.totalPages = (model.totalElements / model.itemsPerPage).ceil();
-              if(model.currentPage! > model.totalPages){
-                model.currentPage = 1;
+              if(widget.data.isNotEmpty){
+                model.totalPages = (model.totalElements / model.itemsPerPage).ceil();
+                if(model.currentPage > model.totalPages){
+                  model.currentPage = 1;
+                }
+                model.setPage();
               }
-              model.setPage();
             });
           },
           itemsPerPageList: model.pages,
         ),
       ],
+    ) : Container(
+        width: double.infinity,
+        alignment: Alignment.center,
+        child: Column(
+            children:[
+              for(var i in widget.data)
+                Listener(
+                  onPointerDown: (event)=> model.currentItem = i,
+                  child: InfoCard(data:i),
+                )
+            ]
+        )
     );
   }
-
-
-
-  // void setPage(){
-  //   pastItems = itemsPerPage * (currentPage-1);
-  //   if(totalElements % itemsPerPage > 0 && currentPage == totalPages){
-  //     pageItems = widget.data.sublist(pastItems);
-  //   }else{
-  //     pageItems = widget.data.sublist(pastItems,pastItems+itemsPerPage);
-  //   }
-  // }
 
 }
 
 class PagerModel{
-  int? currentPage;
-  List<int>? pages;
-  List<dynamic> data;
+  late List<dynamic> data;
 
-  PagerModel(this.data,{this.pages = const [5, 10, 15, 20, 25], this.currentPage = 1});
+  List<int> pages = [5, 10, 15, 20, 25];
 
+  int currentPage = 1;
 
-  late int itemsPerPage = pages!.first;
+  late int itemsPerPage = pages.first;
 
   late List pageItems = data.sublist(pastItems,pastItems + itemsPerPage);
 
-  late int pastItems = itemsPerPage * (currentPage!-1);
+  late int pastItems = itemsPerPage * (currentPage-1);
 
   late final int totalElements = data.length;
 
-  late int totalPages = (totalElements / itemsPerPage).ceil();
+  late int totalPages = data.isNotEmpty ? (totalElements / itemsPerPage).ceil() : 1;
 
 
-  static late dynamic currentItem;
+  late Map<dynamic,dynamic> currentItem = {};
 
 
   void setPage(){
-    pastItems = itemsPerPage * (currentPage!-1);
+    pastItems = itemsPerPage * (currentPage-1);
     if(totalElements % itemsPerPage > 0 && currentPage == totalPages){
       pageItems = data.sublist(pastItems);
     }else{
@@ -131,4 +128,5 @@ class PagerModel{
   }
 
 }
+
 
