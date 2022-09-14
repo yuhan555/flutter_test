@@ -39,7 +39,7 @@ class _InfoCardState extends State<InfoCard> {
             children: [
               Container(
                 width: double.infinity,
-                height: 280,
+                height: 200,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey[400]!),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -49,16 +49,16 @@ class _InfoCardState extends State<InfoCard> {
                   children: [
                     Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.all(25),
+                          padding: const EdgeInsets.all(16),
                           child: Column(
                             children: [
                               Container(
                                 alignment: Alignment.centerLeft,
-                                child: const Text('案件模式：一般',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 18),),
+                                child: const Text('案件模式：一般',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 14),),
                               ),
                               Expanded(
                                   child: Container(
-                                    padding: EdgeInsets.only(top: 20),
+                                    padding: EdgeInsets.only(top: 10),
                                     child: Row(
                                       children: [
                                         Expanded(
@@ -74,13 +74,13 @@ class _InfoCardState extends State<InfoCard> {
                                                 Container(
                                                   padding: EdgeInsets.only(bottom: 10),
                                                   alignment:Alignment.centerLeft,
-                                                  child: Text('要保人',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 20)),
+                                                  child: Text('要保人',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 16)),
                                                 ),
                                                 Expanded(
                                                     child: Container(
                                                       alignment:Alignment.topRight,
                                                       padding: EdgeInsets.symmetric(horizontal: 14),
-                                                      child: Text(realData.aName!,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 20),overflow:TextOverflow.ellipsis,maxLines: 2,),
+                                                      child: Text(realData.aName!,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 16),overflow:TextOverflow.ellipsis,maxLines: 2,),
                                                     )
                                                 )
                                               ],
@@ -100,13 +100,13 @@ class _InfoCardState extends State<InfoCard> {
                                                 Container(
                                                   padding: EdgeInsets.only(left:14,bottom: 10),
                                                   alignment:Alignment.centerLeft,
-                                                  child: Text('被保險人',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 20)),
+                                                  child: Text('被保險人',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 16)),
                                                 ),
                                                 Expanded(
                                                     child: Container(
                                                       padding:  EdgeInsets.symmetric(horizontal: 14),
                                                       alignment:Alignment.topRight,
-                                                      child: Text(realData.iName!,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 20)),
+                                                      child: Text(realData.iName!,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 16)),
                                                     )
                                                 )
                                               ],
@@ -126,13 +126,13 @@ class _InfoCardState extends State<InfoCard> {
                                               Container(
                                                 padding: EdgeInsets.only(left:14,bottom: 10),
                                                 alignment:Alignment.centerLeft,
-                                                child: Text('主約',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 20)),
+                                                child: Text('主約',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 16)),
                                               ),
                                               Expanded(
                                                   child: Container(
                                                     padding:  EdgeInsets.symmetric(horizontal: 14),
                                                     alignment:Alignment.topRight,
-                                                    child: Text(realData.mainIns!,textAlign:TextAlign.right,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 20)),
+                                                    child: Text(realData.mainIns!,textAlign:TextAlign.right,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 16)),
                                                   )
                                               )
                                             ],
@@ -145,13 +145,13 @@ class _InfoCardState extends State<InfoCard> {
                                                 Container(
                                                   padding: EdgeInsets.only(left:14,bottom: 10),
                                                   alignment:Alignment.centerLeft,
-                                                  child: Text('保額',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 20)),
+                                                  child: Text('保額',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 16)),
                                                 ),
                                                 Expanded(
                                                     child: Container(
                                                       padding:  EdgeInsets.symmetric(horizontal: 14),
                                                       alignment:Alignment.topRight,
-                                                      child: Text(realData.unit!,textAlign:TextAlign.right,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 20)),
+                                                      child: Text(realData.unit!,textAlign:TextAlign.right,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 16)),
                                                     )
                                                 )
                                               ],
@@ -167,8 +167,8 @@ class _InfoCardState extends State<InfoCard> {
                         )
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      height: 80,
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      height: 60,
                       decoration: BoxDecoration(
                         borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)),
                         color: Colors.grey[200],
@@ -180,19 +180,19 @@ class _InfoCardState extends State<InfoCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('異動時間：${realData.updateDate!}',style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold,fontSize: 22),),
-                              Text('案件編號：${realData.shortId!}',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 20),)
+                              Text('異動時間：${realData.updateDate!}',style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold,fontSize: 18),),
+                              Text('案件編號：${realData.shortId!}',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 16),)
                             ],
                           ),
                           Row(
                             children: [
                               PrimaryButton(
-                                  label: '編輯',color: Colors.red,minWidth: 50,margin:EdgeInsets.only(left: 6),padding:EdgeInsets.only(top: 10,bottom: 10,left: 8,right: 8),onPressed: (){
+                                  label: '編輯',color: Colors.red,minWidth: 50,margin:EdgeInsets.only(left: 6),padding:EdgeInsets.only(top: 10,bottom: 10,left: 8,right: 8),fontSize:14,onPressed: (){
                               },
                               ),
-                              PrimaryButton(label: '檢視',color: Colors.grey,minWidth: 50,margin:EdgeInsets.only(left: 6),padding:EdgeInsets.only(top: 10,bottom: 10,left: 8,right: 8)),
-                              PrimaryButton(label: '複製',color: Colors.grey,minWidth: 50,margin:EdgeInsets.only(left: 6),padding:EdgeInsets.only(top: 10,bottom: 10,left: 8,right: 8)),
-                              PrimaryButton(label: '刪除',color: Colors.grey,minWidth: 50,margin:EdgeInsets.only(left: 6),padding:EdgeInsets.only(top: 10,bottom: 10,left: 8,right: 8),),
+                              PrimaryButton(label: '檢視',color: Colors.grey,minWidth: 50,margin:EdgeInsets.only(left: 6),padding:EdgeInsets.only(top: 10,bottom: 10,left: 8,right: 8),fontSize:14),
+                              PrimaryButton(label: '複製',color: Colors.grey,minWidth: 50,margin:EdgeInsets.only(left: 6),padding:EdgeInsets.only(top: 10,bottom: 10,left: 8,right: 8),fontSize:14),
+                              PrimaryButton(label: '刪除',color: Colors.grey,minWidth: 50,margin:EdgeInsets.only(left: 6),padding:EdgeInsets.only(top: 10,bottom: 10,left: 8,right: 8),fontSize:14),
                             ],
                           )
                         ],
@@ -211,11 +211,11 @@ class _InfoCardState extends State<InfoCard> {
                       paintingStyle: PaintingStyle.fill,
                     ),
                     child: Container(
-                      width: 130,
-                      height: 110,
+                      width: 110,
+                      height: 80,
                       alignment: Alignment.topRight,
-                      padding: const EdgeInsets.only(top:16,right: 10),
-                      child: Text(realData.caseStatus!,style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20,letterSpacing:1.1),),
+                      padding: const EdgeInsets.only(top:10,right: 6),
+                      child: Text(realData.caseStatus!,style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 16,letterSpacing:1.1),),
                     ),
                   )
               )

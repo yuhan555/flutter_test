@@ -52,7 +52,7 @@ class _CardPageState extends State<CardPage> {
         body: Center(
           child: Container(
             padding: EdgeInsets.all(50),
-            width: 800,
+            width: 700,
             child: TabPager(data: data),
           ),
         )
