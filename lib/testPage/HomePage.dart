@@ -343,11 +343,11 @@ class _BookMarkState extends State<BookMark> {
             ),
           ),
         ),
-        child: FlatButton(
-          padding: const EdgeInsets.only(left: 55),
-          color: widget.focusPage == bookMarkType ? const Color(0xffffe8d0) : Colors.white,
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
+        child: ElevatedButton(
+            style:TextButton.styleFrom(
+              padding: const EdgeInsets.only(left: 55),
+              backgroundColor: widget.focusPage == bookMarkType ? const Color(0xffffe8d0) : Colors.white,
+            ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[

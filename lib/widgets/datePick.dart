@@ -980,11 +980,11 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
     final Widget picker = _buildPicker();
     final Widget actions = ButtonBar(
       children: <Widget>[
-        FlatButton(
+        ElevatedButton(
           onPressed: _handleCancel,
           child: Text(localizations!.cancelButtonLabel),
         ),
-        FlatButton(
+        ElevatedButton(
           onPressed: _handleOk,
           child: Text(localizations!.okButtonLabel),
         ),

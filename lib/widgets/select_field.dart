@@ -1118,7 +1118,7 @@ class _DropdownDialogState<T> extends State<DropdownDialog> {
         ? prepareWidget(widget.doneButton,
         parameter: selectedResult!,
         context: context, stringToWidgetFunction: (string) {
-          return (FlatButton.icon(
+          return (ElevatedButton.icon(
               onPressed: !valid
                   ? null
                   : () {
@@ -1279,7 +1279,7 @@ class _DropdownDialogState<T> extends State<DropdownDialog> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                FlatButton(
+                ElevatedButton(
                   onPressed: () {
                     pop();
                   },

@@ -46,15 +46,15 @@ class PrimaryButtonState extends State<PrimaryButton> {
       margin: widget.margin,
       child: ButtonTheme(
         minWidth: widget.minWidth,
-        child: RaisedButton(
+        child: ElevatedButton(
           onPressed: widget.enable ? widget.onPressed : null,
-          textColor: const Color(0xffffffff),
-          padding: widget.padding,
-          color: widget.color,
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5))),
+          style: TextButton.styleFrom(
+            textStyle: const TextStyle(color: Color(0xffffffff)) ,
+            padding: widget.padding,
+            backgroundColor: widget.color,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+          ),
           child: widget.hasIcon ? UnconstrainedBox(child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -120,21 +120,17 @@ class SecondaryButtonState extends State<SecondaryButton> {
       margin: widget.margin,
       child: ButtonTheme(
         minWidth: widget.minWidth,
-        child: RaisedButton(
-          padding: widget.padding,
+        child: ElevatedButton(
+          style: TextButton.styleFrom(
+            textStyle: const TextStyle(color:  Color(0xFF373A3C)) ,
+            padding: widget.padding,
+            backgroundColor: Color(0xFFFFFFFF),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                side: BorderSide(color: widget.color != null ? widget.color! :  Color(0xff26aca9),width: 1.2)),
+          ),
           onPressed: widget.enable ? widget.onPressed : null,
-          textColor: const Color(0xFF373A3C),
-          color: const Color(0xFFFFFFFF),
-//          disabledColor: Colors.red,
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          shape: RoundedRectangleBorder(
-              borderRadius: const BorderRadius.all(Radius.circular(5)),
-              side: BorderSide(
-                  color: widget.color != null
-                      ? widget.color!
-                      : const Color(0xff26aca9),
-                  width: 1.2)),
+//          disabledColor: Colors.red
           child: Text(widget.label!,
               style: TextStyle(
                 fontSize: widget.fontSize,
@@ -175,89 +171,6 @@ class AlertButtonState extends State<AlertButton> {
             height: 24,
             child: Image.asset('assets/img/InfoRed.png', fit: BoxFit.contain),
           )),
-    );
-  }
-}
-
-//簽名按鈕-----------
-class SignatureButton extends StatefulWidget {
-  final String label; //按鈕文字
-  final VoidCallback? onPressed; //按鈕動作
-//  final EdgeInsetsGeometry margin; //按鈕外間距
-//  final EdgeInsetsGeometry padding; //按鈕內間距
-  final String base64Img;
-  final Alignment textAlignment;
-  final EdgeInsetsGeometry? textMargin;
-  final double? height;
-  final double textFontSize;
-  final bool enable; //是否禁用
-  final Color? textColor;
-  final Color bgColor;
-  const SignatureButton({
-    Key? key,
-    this.label = "請點選",
-    this.onPressed,
-    this.height,
-    this.textFontSize = 20,
-    this.base64Img = '',
-    this.enable = true,
-    this.textAlignment = Alignment.centerLeft,
-    this.textMargin,
-    this.bgColor = const Color(0xFFFFFFFF),
-    this.textColor,
-  }) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return SignatureButtonState();
-  }
-}
-
-class SignatureButtonState extends State<SignatureButton> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: widget.height,
-      child: RaisedButton(
-        padding: EdgeInsets.zero,
-        onPressed: widget.enable ? widget.onPressed : null,
-        textColor: const Color(0xFF373A3C),
-        color: widget.bgColor,
-        highlightColor: Colors.transparent,
-        splashColor: Colors.transparent,
-        elevation: 0,
-        shape: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey[700]!, width: 0),
-        ),
-        disabledColor: const Color(0xFFF1F1F1),
-        child: Stack(
-          children: <Widget>[
-            Align(
-              alignment: widget.textAlignment,
-              child: Container(
-                margin: widget.textMargin,
-                child: widget.base64Img.isEmpty
-                    ? Text(widget.label,
-                    style: TextStyle(
-                      color: widget.textColor,
-                      fontSize: widget.textFontSize,
-                      fontWeight: FontWeight.w400,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 0,
-                    ))
-                    : Image.memory(
-                  base64Decode(widget.base64Img),
-                  fit: BoxFit.fitHeight,
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Image(image: AssetImage("assets/img/pencil_sign.png")),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -311,15 +224,15 @@ class FakeShadowButtonState extends State<FakeShadowButton> {
       ),
       child: ButtonTheme(
         minWidth: 160,
-        child: FlatButton(
+        child: ElevatedButton(
+          style: TextButton.styleFrom(
+            textStyle: const TextStyle(color:Color(0xffffffff)) ,
+            padding: widget.padding,
+            backgroundColor: widget.color,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+          ),
           onPressed: widget.enable ? widget.onPressed : null,
-          textColor: const Color(0xffffffff),
-          padding: widget.padding,
-          color: widget.color,
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5))),
           child: widget.hasIcon ? UnconstrainedBox(
             child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

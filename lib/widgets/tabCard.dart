@@ -121,18 +121,19 @@ class TabCardState extends State<TabCard> {
                         width:widget.avgWidth?tabWidth: null,
                         child: Stack(
                           children: <Widget>[
-                            FlatButton(
-                              minWidth:widget.tabTitleMinWidth,
-                              color: (widget.isCurrentTabIndex ? widget.currentTabIndex == tabs.indexOf(i) :_index == tabs.indexOf(i))
-                                  ? widget.activeColor ?? const Color(0xffe0f0f7)
-                                  : Colors.white,
-                              highlightColor: Colors.transparent,
-                              splashColor: Colors.transparent,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(5),
-                                    topRight: Radius.circular(5),
-                                  )),
+                            ElevatedButton(
+                              style: TextButton.styleFrom(
+                                textStyle: const TextStyle(color:Color(0xffffffff)) ,
+
+                                backgroundColor: (widget.isCurrentTabIndex ? widget.currentTabIndex == tabs.indexOf(i) :_index == tabs.indexOf(i))
+                                    ? widget.activeColor ?? const Color(0xffe0f0f7)
+                                    : Colors.white,
+                                shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(5),
+          topRight: Radius.circular(5),
+        )),
+                              ),
                               onPressed: () {
                                 //print(tabs.indexOf(i));
                                 setState(() {
