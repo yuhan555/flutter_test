@@ -28,8 +28,9 @@ class _InfoCardState extends State<InfoCard> {
         boxShadow: [
           BoxShadow(
               color: Colors.grey.withOpacity(0.4),
-              blurRadius: 4, //陰影模糊程度
-              spreadRadius: 0.3//陰影擴散程度
+              blurRadius: 0.8, //陰影模糊程度
+              spreadRadius: 0.6, //陰影擴散程度
+            offset: Offset(0,1.8)
           )
         ],
       ),
@@ -39,7 +40,7 @@ class _InfoCardState extends State<InfoCard> {
             children: [
               Container(
                 width: double.infinity,
-                height: 200,
+                height: 160,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey[400]!),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -49,22 +50,17 @@ class _InfoCardState extends State<InfoCard> {
                   children: [
                     Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(14),
                           child: Column(
                             children: [
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                child: const Text('案件模式：一般',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 14),),
-                              ),
                               Expanded(
                                   child: Container(
-                                    padding: EdgeInsets.only(top: 10),
                                     child: Row(
                                       children: [
                                         Expanded(
                                           child:Container(
                                             decoration: BoxDecoration(
-                                              border: RDottedLineBorder(
+                                              border: Border(
                                                   right: const BorderSide(
                                                     color: Colors.grey,
                                                   )),
@@ -78,7 +74,7 @@ class _InfoCardState extends State<InfoCard> {
                                                 ),
                                                 Expanded(
                                                     child: Container(
-                                                      alignment:Alignment.topRight,
+                                                      alignment:Alignment.topCenter,
                                                       padding: EdgeInsets.symmetric(horizontal: 14),
                                                       child: Text(realData.aName!,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 16),overflow:TextOverflow.ellipsis,maxLines: 2,),
                                                     )
@@ -90,7 +86,7 @@ class _InfoCardState extends State<InfoCard> {
                                         Expanded(
                                           child:Container(
                                             decoration: BoxDecoration(
-                                              border: RDottedLineBorder(
+                                              border: Border(
                                                   right: const BorderSide(
                                                     color: Colors.grey,
                                                   )),
@@ -105,7 +101,7 @@ class _InfoCardState extends State<InfoCard> {
                                                 Expanded(
                                                     child: Container(
                                                       padding:  EdgeInsets.symmetric(horizontal: 14),
-                                                      alignment:Alignment.topRight,
+                                                      alignment:Alignment.topCenter,
                                                       child: Text(realData.iName!,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 16)),
                                                     )
                                                 )
@@ -116,7 +112,7 @@ class _InfoCardState extends State<InfoCard> {
                                         Container(
                                           width: 260,
                                           decoration: BoxDecoration(
-                                            border: RDottedLineBorder(
+                                            border: Border(
                                                 right: const BorderSide(
                                                   color: Colors.grey,
                                                 )),
@@ -131,31 +127,30 @@ class _InfoCardState extends State<InfoCard> {
                                               Expanded(
                                                   child: Container(
                                                     padding:  EdgeInsets.symmetric(horizontal: 14),
-                                                    alignment:Alignment.topRight,
-                                                    child: Text(realData.mainIns!,textAlign:TextAlign.right,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 16)),
+                                                    alignment:Alignment.topCenter,
+                                                    child: Text(realData.mainIns!,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 16)),
                                                   )
                                               )
                                             ],
                                           ),
                                         ),
-                                        Expanded(
-                                          child:Container(
-                                            child: Column(
-                                              children: [
-                                                Container(
-                                                  padding: EdgeInsets.only(left:14,bottom: 10),
-                                                  alignment:Alignment.centerLeft,
-                                                  child: Text('保額',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 16)),
-                                                ),
-                                                Expanded(
-                                                    child: Container(
-                                                      padding:  EdgeInsets.symmetric(horizontal: 14),
-                                                      alignment:Alignment.topRight,
-                                                      child: Text(realData.unit!,textAlign:TextAlign.right,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 16)),
-                                                    )
-                                                )
-                                              ],
-                                            ),
+                                        Container(
+                                          width: 160,
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.only(left:14,bottom: 10),
+                                                alignment:Alignment.centerLeft,
+                                                child: Text('保額',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 16)),
+                                              ),
+                                              Expanded(
+                                                  child: Container(
+                                                    padding:  EdgeInsets.symmetric(horizontal: 14),
+                                                    alignment:Alignment.center,
+                                                    child: Text(realData.unit!,textAlign:TextAlign.right,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold,fontSize: 16)),
+                                                  )
+                                              )
+                                            ],
                                           ),
                                         ),
                                       ],
@@ -168,7 +163,7 @@ class _InfoCardState extends State<InfoCard> {
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 16),
-                      height: 60,
+                      height: 50,
                       decoration: BoxDecoration(
                         borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10)),
                         color: Colors.grey[200],
@@ -180,9 +175,14 @@ class _InfoCardState extends State<InfoCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('異動時間：${realData.updateDate!}',style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold,fontSize: 18),),
-                              Text('案件編號：${realData.shortId!}',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.bold,fontSize: 16),)
+                              Text('案件模式：一般',style:  TextStyle(color: Colors.grey,fontSize: 14),),
+                              Text('案件編號：${realData.shortId!}',style: TextStyle(color: Colors.grey,fontSize: 14),)
                             ],
+                          ),
+                          Expanded(
+                              child: Text(
+                                '異動時間:${realData.updateDate}',style: TextStyle(color: Colors.red,),
+                              ),
                           ),
                           Row(
                             children: [
