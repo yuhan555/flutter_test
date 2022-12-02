@@ -93,10 +93,15 @@ class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMix
                               }
                             }
                           },
-                          onDelete: (){
-                            keyList.removeAt(itemList.indexOf(item));
-                            itemList.remove(item);
-                            setState(() {});
+                          onDelete: (key){
+                            final i = keyList.indexOf(key);
+                            keyList[i].currentState?.delete();
+                            Future.delayed(const Duration(milliseconds: 390),(){
+                              keyList.removeAt(i);
+                              itemList.removeAt(i);
+                              // print(itemList);
+                              setState(() {});
+                            });
                           },
                         ),
                       )
@@ -124,17 +129,20 @@ class Slider extends StatefulWidget {
     required this.itemKey,
     this.onDrag,
     this.onDelete,
-  }) : super(key: itemKey);
+  }) : super(key: itemKey); /// 注意！key要放進來，父層才抓得到currentState
 
   @override
   ItemState createState() => ItemState();
 
 }
 
-class ItemState extends State<Slider> with SingleTickerProviderStateMixin{
+class ItemState extends State<Slider> with TickerProviderStateMixin{
    double translateX = 0.0;
+   double? itemHeight = 45;
    double maxDragDistance = 180;
    late AnimationController animationController;
+   late AnimationController animationController2;
+   late Animation animation;
    bool isOpen = false;
    @override
    void initState() {
@@ -147,6 +155,14 @@ class ItemState extends State<Slider> with SingleTickerProviderStateMixin{
          translateX = animationController.value;
          setState(() {});
        });
+     animationController2 = AnimationController(
+         vsync: this,
+         duration: const Duration(milliseconds: 180));
+     animation = Tween(begin:itemHeight,end: 0.0).animate(animationController2)..addListener(() {
+       setState(() {
+         itemHeight = animation.value;
+       });
+     });
      super.initState();
    }
 
@@ -156,22 +172,31 @@ class ItemState extends State<Slider> with SingleTickerProviderStateMixin{
      }
    }
 
+   void delete(){
+     animationController.animateTo(0);
+     Future.delayed(const Duration(milliseconds: 200),(){
+       animationController2.forward();
+     });
+   }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned.fill(child: LayoutBuilder(builder: (t,c)=> Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            buildAction('置頂',Colors.grey,c.maxHeight,(){}),
-            buildAction('已讀',Colors.amber,c.maxHeight,(){}),
-            buildAction('刪除',Colors.red,c.maxHeight,(){
-              if(widget.onDelete!=null){
-                widget.onDelete!();
-              }
-            }),
-          ],
-        ),)),
+        Positioned.fill(child: LayoutBuilder(builder: (t,c){
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              buildAction('置頂',Colors.grey,c.maxHeight,(){}),
+              buildAction('已讀',Colors.amber,c.maxHeight,(){}),
+              buildAction('刪除',Colors.red,c.maxHeight,(){
+                if(widget.onDelete!=null){
+                  widget.onDelete!(widget.itemKey);
+                }
+              }),
+            ],
+          );
+        },)),
         GestureDetector(
           onTap: (){
             if(isOpen){
@@ -213,11 +238,12 @@ class ItemState extends State<Slider> with SingleTickerProviderStateMixin{
             offset: Offset(translateX,0),
             child:  Container(
                 width: widget.constraints.maxWidth,
+                height:itemHeight,
                 padding: const EdgeInsets.all(10),
                 alignment: Alignment.centerLeft,
                 color: Colors.white,
                 // decoration: BoxDecoration(border: Border.all(color: Colors.red),color: Colors.white),
-                child: Text('${widget.item['content']}bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
+                child: Text('${widget.item['content']} 測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試')
             ),
           ),
         )
