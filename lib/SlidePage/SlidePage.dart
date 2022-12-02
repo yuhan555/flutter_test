@@ -12,20 +12,18 @@ class SlidePage extends StatefulWidget {
 
 class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMixin{
   late List itemList;
-  late GlobalKey<AnimatedListState> listKey;
   late AnimationController animationController;
+  late List<GlobalKey<ItemState>> keyList;
 
   @override
   void initState() {
     itemList = List.generate(20, (index) => {"index":index,"content":'content $index'});
-    listKey = GlobalKey<AnimatedListState>();
-    animationController = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+    keyList = List.generate(20, (index) => GlobalKey<ItemState>());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<GlobalKey<ItemState>> keyList = List.generate(20, (index) => GlobalKey<ItemState>());
 
     return Scaffold(
       body: Center(
@@ -70,41 +68,33 @@ class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMix
                     //   ],
                     // ),
                     /// 方法二，使用Transform來位移
-                      AnimatedBuilder(
-                        animation:animationController,
-                        builder: (context, child){
-                          return ClipRect(
-                            child: Align(
-                              child: SizedBox(
-                                width: constraints.maxWidth,
-                                child: child,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Slider(
-                          item: item,
-                          constraints:constraints,
-                          itemKey: keyList[itemList.indexOf(item)],
-                          onDrag: (key){
-                            for (var itemKey in keyList) {
-                              if(itemKey != key){
-                                itemKey.currentState?.close();
+                      ClipRect(
+                        child:SizedBox(
+                          width: constraints.maxWidth,
+                          child: Slider(
+                            item: item,
+                            constraints:constraints,
+                            itemKey: keyList[itemList.indexOf(item)],
+                            onDrag: (key){
+                              for (var itemKey in keyList) {
+                                if(itemKey != key){
+                                  itemKey.currentState?.close();
+                                }
                               }
-                            }
-                          },
-                          onDelete: (key){
-                            final i = keyList.indexOf(key);
-                            keyList[i].currentState?.delete();
-                            Future.delayed(const Duration(milliseconds: 390),(){
-                              keyList.removeAt(i);
-                              itemList.removeAt(i);
-                              // print(itemList);
-                              setState(() {});
-                            });
-                          },
+                            },
+                            onDelete: (key){
+                              final i = keyList.indexOf(key);
+                              keyList[i].currentState?.delete();
+                              Future.delayed(const Duration(milliseconds: 390),(){
+                                keyList.removeAt(i);
+                                itemList.removeAt(i);
+                                // print(itemList);
+                                setState(() {});
+                              });
+                            },
+                          ),
                         ),
-                      )
+                    )
                   ],
                 ),
           ),
