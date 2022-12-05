@@ -104,6 +104,8 @@ class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMix
                             onPin: (key){
                               final i = keyList.indexOf(key);
                               final moveItem = allItem[i];
+                              //資料註記是否釘選
+                              allItem[i]['pin'] = true;
                               //移動項目到釘選
                               pinList.insert(0, itemList.removeAt(itemList.indexOf(moveItem)));
                               keyList.insert(0, keyList.removeAt(i));
@@ -279,7 +281,7 @@ class ItemState extends State<Slider> with TickerProviderStateMixin{
                 // decoration: BoxDecoration(border: Border.all(color: Colors.red),color: Colors.white),
                 child: Row(
                   children: [
-                    pinning ? Icon(Icons.usb,color: Colors.green) : SizedBox.shrink(),
+                    pinning ? const Icon(Icons.usb,color: Colors.green) : const SizedBox.shrink(),
                     Text('${widget.item['content']} 測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試')
                   ],
                 )
