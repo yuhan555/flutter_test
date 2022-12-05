@@ -11,20 +11,23 @@ class SlidePage extends StatefulWidget {
 }
 
 class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMixin{
-  late List itemList;
+  late List itemList; //未釘選的
   late AnimationController animationController;
   late List<GlobalKey<ItemState>> keyList;
+  late List pinList; //釘選的
+  late List allItem; //全部
 
   @override
   void initState() {
     itemList = List.generate(20, (index) => {"index":index,"content":'content $index'});
     keyList = List.generate(20, (index) => GlobalKey<ItemState>());
+    pinList = [];
+    allItem = [...pinList,...itemList];
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Center(
         child: Container(
@@ -36,7 +39,7 @@ class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMix
                 ListView(
                   padding: const EdgeInsets.all(0),
                   children: [
-                    for (var item in itemList)
+                    for (var item in allItem)
                     /// 方法一，用另一個Container包相同字段，去撐開Stack高度，根據Stack高度去設置按鈕高度
                     // Stack(
                     //   children: [
@@ -74,7 +77,7 @@ class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMix
                           child: Slider(
                             item: item,
                             constraints:constraints,
-                            itemKey: keyList[itemList.indexOf(item)],
+                            itemKey: keyList[allItem.indexOf(item)],
                             onDrag: (key){
                               for (var itemKey in keyList) {
                                 if(itemKey != key){
@@ -87,8 +90,28 @@ class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMix
                               keyList[i].currentState?.delete();
                               Future.delayed(const Duration(milliseconds: 390),(){
                                 keyList.removeAt(i);
-                                itemList.removeAt(i);
-                                // print(itemList);
+                                final item = allItem[i];
+                                //要刪除的item在釘選還是未釘選裏面
+                                if(i < pinList.length){
+                                  pinList.removeAt(pinList.indexOf(item));
+                                }else{
+                                  itemList.removeAt(itemList.indexOf(item));
+                                }
+                                allItem = [...pinList,...itemList];
+                                setState(() {});
+                              });
+                            },
+                            onPin: (key){
+                              final i = keyList.indexOf(key);
+                              final moveItem = allItem[i];
+                              //移動項目到釘選
+                              pinList.insert(0, itemList.removeAt(itemList.indexOf(moveItem)));
+                              keyList.insert(0, keyList.removeAt(i));
+                              //重整項目
+                              allItem = [...pinList,...itemList];
+                              final nowI = keyList.indexOf(key);
+                              keyList[nowI].currentState?.pin();
+                              Future.delayed(const Duration(milliseconds: 360),(){
                                 setState(() {});
                               });
                             },
@@ -111,6 +134,7 @@ class Slider extends StatefulWidget {
   final GlobalKey<ItemState> itemKey;
   final Function? onDrag;
   final Function? onDelete;
+  final Function? onPin;
 
   const Slider({
     Key? key,
@@ -119,7 +143,8 @@ class Slider extends StatefulWidget {
     required this.itemKey,
     this.onDrag,
     this.onDelete,
-  }) : super(key: itemKey); /// 注意！key要放進來，父層才抓得到currentState
+    this.onPin,
+  }) :super(key: itemKey); /// 注意！key要放進來，父層才抓得到currentState
 
   @override
   ItemState createState() => ItemState();
@@ -134,6 +159,8 @@ class ItemState extends State<Slider> with TickerProviderStateMixin{
    late AnimationController animationController2;
    late Animation animation;
    bool isOpen = false;
+   bool pinning = false;
+
    @override
    void initState() {
      animationController = AnimationController(
@@ -169,6 +196,17 @@ class ItemState extends State<Slider> with TickerProviderStateMixin{
      });
    }
 
+   void pin(){
+     animationController.animateTo(0);
+     Future.delayed(const Duration(milliseconds: 180),(){
+       animationController2.forward();
+     });
+     Future.delayed(const Duration(milliseconds: 360),(){
+       animationController2.reverse();
+       pinning = true;
+     });
+   }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -177,8 +215,14 @@ class ItemState extends State<Slider> with TickerProviderStateMixin{
           return Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              buildAction('置頂',Colors.grey,c.maxHeight,(){}),
-              buildAction('已讀',Colors.amber,c.maxHeight,(){}),
+              buildAction('已讀',Colors.grey,c.maxHeight,(){}),
+              Visibility(
+                visible: !pinning,
+                child: buildAction('置頂',Colors.amber,c.maxHeight,(){
+                if(widget.onPin!=null){
+                  widget.onPin!(widget.itemKey);
+                }
+              }),),
               buildAction('刪除',Colors.red,c.maxHeight,(){
                 if(widget.onDelete!=null){
                   widget.onDelete!(widget.itemKey);
@@ -233,7 +277,12 @@ class ItemState extends State<Slider> with TickerProviderStateMixin{
                 alignment: Alignment.centerLeft,
                 color: Colors.white,
                 // decoration: BoxDecoration(border: Border.all(color: Colors.red),color: Colors.white),
-                child: Text('${widget.item['content']} 測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試')
+                child: Row(
+                  children: [
+                    pinning ? Icon(Icons.usb,color: Colors.green) : SizedBox.shrink(),
+                    Text('${widget.item['content']} 測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試')
+                  ],
+                )
             ),
           ),
         )
