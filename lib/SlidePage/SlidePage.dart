@@ -11,18 +11,28 @@ class SlidePage extends StatefulWidget {
 }
 
 class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMixin{
-  late List itemList; //未釘選的
+  late List itemList;
   late AnimationController animationController;
   late List<GlobalKey<ItemState>> keyList;
-  late List pinList; //釘選的
-  late List allItem; //全部
 
   @override
   void initState() {
-    itemList = List.generate(20, (index) => {"index":index,"content":'content $index'});
+    itemList = List.generate(20, (index) => {"index":index,"content":'content $index',"pin":false});
     keyList = List.generate(20, (index) => GlobalKey<ItemState>());
-    pinList = [];
-    allItem = [...pinList,...itemList];
+
+    Future.delayed(const Duration(seconds: 8),(){
+      final unPinFirst = itemList.firstWhere((element) => element['pin'] == false);
+      final unPinIndex = itemList.indexOf(unPinFirst);
+      final moveItem = itemList.firstWhere((element) => element['index'] == 10);
+      final moveIndex = itemList.indexOf(moveItem);
+      keyList[moveIndex].currentState?.move();
+      itemList.insert(unPinIndex, itemList.removeAt(moveIndex));
+      keyList.insert(unPinIndex, keyList.removeAt(moveIndex));
+      Future.delayed(const Duration(milliseconds: 180),(){
+        setState(() {});
+      });
+    });
+
     super.initState();
   }
 
@@ -39,7 +49,7 @@ class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMix
                 ListView(
                   padding: const EdgeInsets.all(0),
                   children: [
-                    for (var item in allItem)
+                    for (var item in itemList)
                     /// 方法一，用另一個Container包相同字段，去撐開Stack高度，根據Stack高度去設置按鈕高度
                     // Stack(
                     //   children: [
@@ -77,7 +87,7 @@ class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMix
                           child: Slider(
                             item: item,
                             constraints:constraints,
-                            itemKey: keyList[allItem.indexOf(item)],
+                            itemKey: keyList[itemList.indexOf(item)],
                             onDrag: (key){
                               for (var itemKey in keyList) {
                                 if(itemKey != key){
@@ -90,27 +100,17 @@ class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMix
                               keyList[i].currentState?.delete();
                               Future.delayed(const Duration(milliseconds: 390),(){
                                 keyList.removeAt(i);
-                                final item = allItem[i];
-                                //要刪除的item在釘選還是未釘選裏面
-                                if(i < pinList.length){
-                                  pinList.removeAt(pinList.indexOf(item));
-                                }else{
-                                  itemList.removeAt(itemList.indexOf(item));
-                                }
-                                allItem = [...pinList,...itemList];
+                                itemList.removeAt(i);
                                 setState(() {});
                               });
                             },
                             onPin: (key){
                               final i = keyList.indexOf(key);
-                              final moveItem = allItem[i];
                               //資料註記是否釘選
-                              allItem[i]['pin'] = true;
-                              //移動項目到釘選
-                              pinList.insert(0, itemList.removeAt(itemList.indexOf(moveItem)));
+                              itemList[i]['pin'] = true;
+                              //移動項目
+                              itemList.insert(0, itemList.removeAt(i));
                               keyList.insert(0, keyList.removeAt(i));
-                              //重整項目
-                              allItem = [...pinList,...itemList];
                               final nowI = keyList.indexOf(key);
                               keyList[nowI].currentState?.pin();
                               Future.delayed(const Duration(milliseconds: 360),(){
@@ -162,6 +162,7 @@ class ItemState extends State<Slider> with TickerProviderStateMixin{
    late Animation animation;
    bool isOpen = false;
    bool pinning = false;
+   bool unRead = false;
 
    @override
    void initState() {
@@ -206,6 +207,14 @@ class ItemState extends State<Slider> with TickerProviderStateMixin{
      Future.delayed(const Duration(milliseconds: 360),(){
        animationController2.reverse();
        pinning = true;
+     });
+   }
+
+   void move(){
+     animationController2.forward();
+     Future.delayed(const Duration(milliseconds: 180),(){
+       animationController2.reverse();
+       unRead = true;
      });
    }
 
@@ -282,7 +291,9 @@ class ItemState extends State<Slider> with TickerProviderStateMixin{
                 child: Row(
                   children: [
                     pinning ? const Icon(Icons.usb,color: Colors.green) : const SizedBox.shrink(),
-                    Text('${widget.item['content']} 測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試')
+                    Text('${widget.item['content']} 測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試'),
+                    Spacer(),
+                    unRead ? const Icon(Icons.circle_notifications,color: Colors.red) : const SizedBox.shrink(),
                   ],
                 )
             ),
