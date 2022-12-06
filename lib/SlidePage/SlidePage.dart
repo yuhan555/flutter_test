@@ -17,7 +17,7 @@ class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMix
 
   @override
   void initState() {
-    itemList = List.generate(20, (index) => {"index":index,"content":'content $index',"pin":false});
+    itemList = List.generate(20, (index) => {"index":index,"content":'content $index',"pin":false,"unRead":false});
     keyList = List.generate(20, (index) => GlobalKey<ItemState>());
 
     Future.delayed(const Duration(seconds: 8),(){
@@ -25,6 +25,7 @@ class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMix
       final unPinIndex = itemList.indexOf(unPinFirst);
       final moveItem = itemList.firstWhere((element) => element['index'] == 10);
       final moveIndex = itemList.indexOf(moveItem);
+      itemList[moveIndex]['unRead'] = true;
       keyList[moveIndex].currentState?.move();
       itemList.insert(unPinIndex, itemList.removeAt(moveIndex));
       keyList.insert(unPinIndex, keyList.removeAt(moveIndex));
@@ -40,90 +41,110 @@ class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.black87)),
-          width: 600,
-          height: 600,
-          child: LayoutBuilder(
-            builder: (context, constraints) =>
-                ListView(
-                  padding: const EdgeInsets.all(0),
-                  children: [
-                    for (var item in itemList)
-                    /// 方法一，用另一個Container包相同字段，去撐開Stack高度，根據Stack高度去設置按鈕高度
-                    // Stack(
-                    //   children: [
-                    //     Container(
-                    //         width: constraints.maxWidth,
-                    //         padding: const EdgeInsets.all(10),
-                    //         alignment: Alignment.centerLeft,
-                    //         child: const Text("測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試",style: TextStyle(color: Colors.transparent),),
-                    //     ),
-                    //     LayoutBuilder(builder: (t,c)=> Row(
-                    //       mainAxisAlignment: MainAxisAlignment.end,
-                    //       children: [
-                    //         buildAction("置頂", Colors.grey,c.maxHeight, () {}),
-                    //         // buildAction( "標為未讀", Colors.amber,c.maxHeight, () {}),
-                    //         buildAction("刪除", Colors.red, c.maxHeight,() {}),
-                    //       ],
-                    //     ),),
-                    //     Positioned(
-                    //       left: -120,
-                    //       child: Container(
-                    //           width: constraints.maxWidth,
-                    //           padding: const EdgeInsets.all(10),
-                    //           alignment: Alignment.centerLeft,
-                    //           color: Colors.white,
-                    //           // decoration: BoxDecoration(border: Border.all(color: Colors.red),color: Colors.white),
-                    //           child: const Text("測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試",)
-                    //       ),
-                    //     )
-                    //   ],
-                    // ),
-                    /// 方法二，使用Transform來位移
-                      ClipRect(
-                        child:SizedBox(
-                          width: constraints.maxWidth,
-                          child: Slider(
-                            item: item,
-                            constraints:constraints,
-                            itemKey: keyList[itemList.indexOf(item)],
-                            onDrag: (key){
-                              for (var itemKey in keyList) {
-                                if(itemKey != key){
-                                  itemKey.currentState?.close();
-                                }
-                              }
-                            },
-                            onDelete: (key){
-                              final i = keyList.indexOf(key);
-                              keyList[i].currentState?.delete();
-                              Future.delayed(const Duration(milliseconds: 390),(){
-                                keyList.removeAt(i);
-                                itemList.removeAt(i);
-                                setState(() {});
-                              });
-                            },
-                            onPin: (key){
-                              final i = keyList.indexOf(key);
-                              //資料註記是否釘選
-                              itemList[i]['pin'] = true;
-                              //移動項目
-                              itemList.insert(0, itemList.removeAt(i));
-                              keyList.insert(0, keyList.removeAt(i));
-                              final nowI = keyList.indexOf(key);
-                              keyList[nowI].currentState?.pin();
-                              Future.delayed(const Duration(milliseconds: 360),(){
-                                setState(() {});
-                              });
-                            },
-                          ),
-                        ),
-                    )
-                  ],
-                ),
-          ),
-        ),
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.all(30),
+              decoration: BoxDecoration(border: Border.all(color: Colors.black87)),
+              width: 600,
+              height: 600,
+              child: LayoutBuilder(
+                builder: (context, constraints) =>
+                    ListView(
+                      padding: const EdgeInsets.all(0),
+                      children: [
+                        for (var item in itemList)
+                        /// 方法一，用另一個Container包相同字段，去撐開Stack高度，根據Stack高度去設置按鈕高度
+                        // Stack(
+                        //   children: [
+                        //     Container(
+                        //         width: constraints.maxWidth,
+                        //         padding: const EdgeInsets.all(10),
+                        //         alignment: Alignment.centerLeft,
+                        //         child: const Text("測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試",style: TextStyle(color: Colors.transparent),),
+                        //     ),
+                        //     LayoutBuilder(builder: (t,c)=> Row(
+                        //       mainAxisAlignment: MainAxisAlignment.end,
+                        //       children: [
+                        //         buildAction("置頂", Colors.grey,c.maxHeight, () {}),
+                        //         // buildAction( "標為未讀", Colors.amber,c.maxHeight, () {}),
+                        //         buildAction("刪除", Colors.red, c.maxHeight,() {}),
+                        //       ],
+                        //     ),),
+                        //     Positioned(
+                        //       left: -120,
+                        //       child: Container(
+                        //           width: constraints.maxWidth,
+                        //           padding: const EdgeInsets.all(10),
+                        //           alignment: Alignment.centerLeft,
+                        //           color: Colors.white,
+                        //           // decoration: BoxDecoration(border: Border.all(color: Colors.red),color: Colors.white),
+                        //           child: const Text("測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試",)
+                        //       ),
+                        //     )
+                        //   ],
+                        // ),
+                        /// 方法二，使用Transform來位移
+                          ClipRect(
+                            child:SizedBox(
+                              width: constraints.maxWidth,
+                              child: Slider(
+                                item: item,
+                                pinning: item['pin'],
+                                unRead: item['unRead'],
+                                constraints:constraints,
+                                itemKey: keyList[itemList.indexOf(item)],
+                                onDrag: (key){
+                                  for (var itemKey in keyList) {
+                                    if(itemKey != key){
+                                      itemKey.currentState?.close();
+                                    }
+                                  }
+                                },
+                                onDelete: (key){
+                                  final i = keyList.indexOf(key);
+                                  keyList[i].currentState?.delete();
+                                  Future.delayed(const Duration(milliseconds: 390),(){
+                                    keyList.removeAt(i);
+                                    itemList.removeAt(i);
+                                    setState(() {});
+                                  });
+                                },
+                                onPin: (key){
+                                  final i = keyList.indexOf(key);
+                                  //資料註記是否釘選
+                                  itemList[i]['pin'] = true;
+                                  //移動項目
+                                  itemList.insert(0, itemList.removeAt(i));
+                                  keyList.insert(0, keyList.removeAt(i));
+                                  final nowI = keyList.indexOf(key);
+                                  keyList[nowI].currentState?.pin();
+                                  Future.delayed(const Duration(milliseconds: 360),(){
+                                    setState(() {});
+                                  });
+                                },
+                              ),
+                            ),
+                          )
+                      ],
+                    ),
+              ),
+            ),
+            // Row(
+            //   children: [
+            //     for(var i = 1; i<=10;i++)
+            //     Container(
+            //       padding: EdgeInsets.all(20),
+            //       child: Text('$i',style: TextStyle(fontSize: 50,fontWeight: FontWeight.bold,color: Colors.white,
+            //           shadows:[ Shadow(color: Colors.black,offset:Offset(2, 2),blurRadius: 0),
+            //             Shadow(color: Colors.black,offset:Offset(-2, -2),blurRadius: 0),
+            //             Shadow(color: Colors.black,offset:Offset(2, -2),blurRadius: 0),
+            //             Shadow(color: Colors.black,offset:Offset(-2, 2),blurRadius: 0),] ),),
+            //     )
+            //   ],
+            // )
+          ],
+        )
       )
     );
   }
@@ -137,6 +158,8 @@ class Slider extends StatefulWidget {
   final Function? onDrag;
   final Function? onDelete;
   final Function? onPin;
+  final bool pinning;
+  final bool unRead;
 
   const Slider({
     Key? key,
@@ -146,6 +169,8 @@ class Slider extends StatefulWidget {
     this.onDrag,
     this.onDelete,
     this.onPin,
+    this.pinning = false,
+    this.unRead = false,
   }) :super(key: itemKey); /// 注意！key要放進來，父層才抓得到currentState
 
   @override
@@ -161,8 +186,6 @@ class ItemState extends State<Slider> with TickerProviderStateMixin{
    late AnimationController animationController2;
    late Animation animation;
    bool isOpen = false;
-   bool pinning = false;
-   bool unRead = false;
 
    @override
    void initState() {
@@ -206,7 +229,6 @@ class ItemState extends State<Slider> with TickerProviderStateMixin{
      });
      Future.delayed(const Duration(milliseconds: 360),(){
        animationController2.reverse();
-       pinning = true;
      });
    }
 
@@ -214,7 +236,6 @@ class ItemState extends State<Slider> with TickerProviderStateMixin{
      animationController2.forward();
      Future.delayed(const Duration(milliseconds: 180),(){
        animationController2.reverse();
-       unRead = true;
      });
    }
 
@@ -228,7 +249,7 @@ class ItemState extends State<Slider> with TickerProviderStateMixin{
             children: [
               buildAction('已讀',Colors.grey,c.maxHeight,(){}),
               Visibility(
-                visible: !pinning,
+                visible: !widget.pinning,
                 child: buildAction('置頂',Colors.amber,c.maxHeight,(){
                 if(widget.onPin!=null){
                   widget.onPin!(widget.itemKey);
@@ -290,10 +311,10 @@ class ItemState extends State<Slider> with TickerProviderStateMixin{
                 // decoration: BoxDecoration(border: Border.all(color: Colors.red),color: Colors.white),
                 child: Row(
                   children: [
-                    pinning ? const Icon(Icons.usb,color: Colors.green) : const SizedBox.shrink(),
+                    widget.pinning ? const Icon(Icons.usb,color: Colors.green) : const SizedBox.shrink(),
                     Text('${widget.item['content']} 測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試'),
                     Spacer(),
-                    unRead ? const Icon(Icons.circle_notifications,color: Colors.red) : const SizedBox.shrink(),
+                    widget.unRead ? const Icon(Icons.circle_notifications,color: Colors.red) : const SizedBox.shrink(),
                   ],
                 )
             ),
