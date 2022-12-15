@@ -35,10 +35,13 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  dartx: 0.5.0
+  dartx: ^1.1.0
   intl: ^0.17.0
   flutter_bloc: ^8.0.1
   r_dotted_line_border: ^0.1.1
+  path: ^1.8.1
+  path_provider: ^2.0.11
+  share_plus: ^6.3.0
   pager:
     path: plugin/pager-main
 

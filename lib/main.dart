@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_test/sharePage/sharePage.dart';
 
 import 'CardPage/CardPage.dart';
 import 'SlidePage/SlidePage.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const SlidePage(),
+      home: const SharePage(),
     );
   }
 }

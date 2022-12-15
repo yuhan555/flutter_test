@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_test/SlidePage/SlidePage.dart';
 import 'package:my_test/extension/WidgetExtension.dart';
 import 'package:my_test/testPage/ApplyCorrection.dart';
 import 'package:my_test/testPage/InsuredOwnerCorrection.dart';
@@ -133,6 +134,8 @@ Widget getPageWidget(ActivePage activePage){
       return Photograph();
     case BookMarkType.Upload:
       return Upload();
+    case BookMarkType.TestOne:
+      return SlidePage();
     default:
       return Container();
   }
@@ -149,6 +152,7 @@ enum BookMarkType{
   PreviewSignature, //預覽簽名
   Photograph, //同意書編號/拍照
   Upload, //上傳
+  TestOne, // 練習一
 }
 
 extension BookMarkTypeExtension on BookMarkType {
@@ -170,6 +174,8 @@ extension BookMarkTypeExtension on BookMarkType {
         return "同意書編號/拍照";
       case BookMarkType.Upload:
         return "上傳";
+      case BookMarkType.TestOne:
+        return "練習一";
       default:
         return "";
     }
