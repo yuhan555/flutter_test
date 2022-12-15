@@ -27,9 +27,7 @@ class _SharePageState extends State<SharePage> {
 
   @override
   Widget build(BuildContext context) {
-
-    final Size size = MediaQuery.of(context).size;
-
+    
     return Scaffold(
       body: Center(
         child: Column(
@@ -44,7 +42,7 @@ class _SharePageState extends State<SharePage> {
                     setState(() {});
                   },
                   child: Container(
-                    margin: EdgeInsets.all(20),
+                    margin: const EdgeInsets.all(20),
                     decoration: BoxDecoration(border: Border.all(width: 2,color: selected == index ? Colors.green : Colors.transparent)),
                     child: Image.asset('assets/img/${imgList[index]}',width: 80,height: 80,fit: BoxFit.contain,),
                   ),
@@ -100,10 +98,11 @@ class _SharePageState extends State<SharePage> {
     var buffer = bytes.buffer;
     String imgBase64 = base64.encode(Uint8List.view(buffer));
     var dir =  await AppFileManager.getTempPath();
-    File file = File("$dir/thePic.jpg");
+    File file = File("$dir/${imgList[selected!]}");
     await file.writeAsBytes(base64Decode(imgBase64));
     var filePath = file.path;
-    Share.shareXFiles([XFile(filePath)],subject:'Great picture!',text: 'Great picture!',sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
+
+    Share.shareXFiles([XFile(filePath)],subject:'與你分享這張圖片!',sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size);
   }
 }
 

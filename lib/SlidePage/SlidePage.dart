@@ -43,10 +43,10 @@ class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMix
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.all(30),
+              margin: const EdgeInsets.all(30),
               decoration: BoxDecoration(border: Border.all(color: Colors.black87)),
               width: 600,
-              height: 600,
+              height: 500,
               child: LayoutBuilder(
                 builder: (context, constraints) =>
                     ListView(

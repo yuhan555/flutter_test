@@ -41,22 +41,22 @@ class _ItemsPerPageState extends State<ItemsPerPage> {
         ),
         const SizedBox(width: 16),
         SizedBox(
-          width: 60,
+          width: 80,
           height: 35,
           child: DropdownButtonFormField(
             value: _currentValue,
             focusColor: Colors.transparent,
             decoration: const InputDecoration(
               contentPadding: EdgeInsets.fromLTRB(12, 0, 0, 0),
-                border: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5),
-                  ),
-                  borderSide: BorderSide(
-                    color: Colors.grey,
-                  ),
+              border: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
                 ),
+                borderSide: BorderSide(
+                  color: Colors.grey,
+                ),
+              ),
             ),
             items: widget.itemsPerPage.map((value) {
               return DropdownMenuItem<int>(

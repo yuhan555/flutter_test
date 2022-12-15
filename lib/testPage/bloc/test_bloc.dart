@@ -85,6 +85,8 @@ class TestBloc extends Bloc<TestEvent, TestState> {
       [BookMarkType.PreviewSignature],
       [BookMarkType.Photograph],
       [BookMarkType.Upload],
+      [BookMarkType.Test1],
+      [BookMarkType.Test2],
     ];
     // bookMark.removeWhere((e){
     //   e.removeWhere((ele) => hidePage.contains(ele));
