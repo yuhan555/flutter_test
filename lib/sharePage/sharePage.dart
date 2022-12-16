@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_test/base/BaseState.dart';
 import 'package:my_test/util/AppFileManager.dart';
 import 'package:my_test/widgets/widgets.dart';
 import 'package:share_plus/share_plus.dart';
@@ -29,66 +30,73 @@ class _SharePageState extends State<SharePage> {
   Widget build(BuildContext context) {
     
     return Scaffold(
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(imgList.length, (index) => GestureDetector(
-                  onTap: (){
-                    selected = index;
-                    setState(() {});
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(border: Border.all(width: 2,color: selected == index ? Colors.green : Colors.transparent)),
-                    child: Image.asset('assets/img/${imgList[index]}',width: 80,height: 80,fit: BoxFit.contain,),
-                  ),
-                ),)
-            ),
-            Builder(
-              builder: (BuildContext context) {
-                return PrimaryButton(
-                  label:'分享',
-                  onPressed: (){
-                    if(selected!=null){
-                      sharePic(context);
-                    }else{
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false, //点击遮罩不关闭对话框
-                        builder: (context) {
-                          return AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                const Padding(
-                                  padding: EdgeInsets.all(30),
-                                  child: Text('請選擇圖片'),
-                                ),
-                                PrimaryButton(
-                                  label: 'OK',
-                                  onPressed: (){
-                                    Navigator.pop(context);
-                                  },
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    }
-                    // sharePic(context);
-                  },
-                );
-              },
-            ),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: (){
+         selected = null;
+         setState(() {});
+        },
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(imgList.length, (index) => GestureDetector(
+                    onTap: (){
+                      selected = index;
+                      setState(() {});
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(border: Border.all(width: 2,color: selected == index ? Colors.green : Colors.transparent)),
+                      child: Image.asset('assets/img/${imgList[index]}',width: 80,height: 80,fit: BoxFit.contain,),
+                    ),
+                  ),)
+              ),
+              Builder(
+                builder: (BuildContext context) {
+                  return PrimaryButton(
+                    label:'分享',
+                    onPressed: (){
+                      if(selected!=null){
+                        sharePic(context);
+                      }else{
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false, //点击遮罩不关闭对话框
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  const Padding(
+                                    padding: EdgeInsets.all(30),
+                                    child: Text('請選擇圖片'),
+                                  ),
+                                  PrimaryButton(
+                                    label: 'OK',
+                                    onPressed: (){
+                                      Navigator.pop(context);
+                                    },
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }
+                      // sharePic(context);
+                    },
+                  );
+                },
+              ),
 
-          ],
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 
