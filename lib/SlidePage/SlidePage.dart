@@ -11,7 +11,6 @@ class SlidePage extends StatefulWidget {
 
 class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMixin{
   late List itemList;
-  late AnimationController animationController;
   late List<GlobalKey<ItemState>> keyList;
 
   @override
@@ -29,7 +28,9 @@ class _SlidePageState extends State<SlidePage> with SingleTickerProviderStateMix
       itemList.insert(unPinIndex, itemList.removeAt(moveIndex));
       keyList.insert(unPinIndex, keyList.removeAt(moveIndex));
       Future.delayed(const Duration(milliseconds: 180),(){
-        setState(() {});
+        if(mounted){
+          setState(() {});
+        }
       });
     });
 
@@ -322,6 +323,14 @@ class ItemState extends State<Slider> with TickerProviderStateMixin{
       ],
     );
   }
+
+   @override
+   void dispose() {
+     // TODO: implement dispose
+     animationController.dispose();
+     animationController2.dispose();
+     super.dispose();
+   }
 }
 
 Widget buildAction(String text, Color color, double height,GestureTapCallback tap) {
