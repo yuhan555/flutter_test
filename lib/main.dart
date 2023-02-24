@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_test/colorMatchGame/color_match_game.dart';
 import 'package:my_test/sharePage/sharePage.dart';
 
 import 'CardPage/CardPage.dart';
@@ -25,12 +26,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: const ColorMatchGame(),
     );
   }
 }
