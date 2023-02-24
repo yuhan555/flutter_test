@@ -67,6 +67,6 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
         list.add(tempCol);
       }
     }
-    return list;
+    return list.shuffled();
   }
 }
