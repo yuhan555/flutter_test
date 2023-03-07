@@ -39,6 +39,7 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
     return Scaffold(
       body: Container(
           width: cWidth,
+          height: cHeight,
           padding: const EdgeInsets.all(50),
           color: Colors.white,
           child: Column(
@@ -82,6 +83,45 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                   )
                 ],
               ),
+              Expanded(
+                  child: Center(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: numberMode.getWidth,
+                          child: Wrap(
+                            spacing: 15, // 主轴(水平)方向间距
+                            runSpacing: 15, // 纵轴（垂直）方向间距
+                            children: [
+                              for(var c in colorListA)
+                                Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(50),color: c),
+                                ),
+                            ],
+                          ),
+                        ).addBottomMargin(60),
+                        SizedBox(
+                          width: numberMode.getWidth,
+                          child: Wrap(
+                            spacing: 15, // 主轴(水平)方向间距
+                            runSpacing: 15, // 纵轴（垂直）方向间距
+                            children: [
+                              for(var c in colorListB)
+                                Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(50),color: c),
+                                ),
+                            ],
+                          ),
+                        )
+
+                      ],
+                    ),
+                  )
+              )
             ],
           )
       ),
@@ -169,7 +209,7 @@ extension NumberExt on NumberMode{
   double get getWidth {
     switch (this) {
       case NumberMode.n24:
-        return 350;
+        return 650;
       case NumberMode.n36:
       case NumberMode.n48:
         return 650;
