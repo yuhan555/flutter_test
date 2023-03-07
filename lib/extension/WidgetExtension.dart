@@ -21,9 +21,7 @@ extension WidgetExtension on Widget {
     );
   }
   
-  addBottomMargin({
-    double bottom = 0,
-}){
+  addBottomMargin(double bottom){
     return Container(margin: EdgeInsets.only(bottom: bottom),child:this);
     
   }
