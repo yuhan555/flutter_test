@@ -94,13 +94,33 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                       )
                   )
                 ],
-              ),
+              ).addBottomMargin(16),
               Expanded(
                 flex: 2,
                   child: Column(
                     children: [
-                      Expanded(child: getList(colorListA)),
-                      Expanded(child: getList(colorListB)),
+                      Expanded(
+                          child: Container(
+                            margin: EdgeInsets.all(10),
+                            decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: BorderRadius.circular(50)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Drog to here',style: TextStyle(fontFamily: 'Rajdhani',fontSize: 18),).addBottomMargin(10),
+                                getList(colorListA),
+                              ],
+                            ))
+                      ),
+                      Expanded(child: Container(
+                          margin: EdgeInsets.all(10),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.black12),borderRadius: BorderRadius.circular(50)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Choice color',style: TextStyle(fontFamily: 'Rajdhani',fontSize: 18),).addBottomMargin(10),
+                              getList(colorListB),
+                            ],
+                          ))),
                     ],
                   ),
               )
@@ -117,9 +137,9 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
       if(i+numberMode.getHorizontalCount > colors.length) break;
       List<Color> rowCount = colors.getRange(i, i+numberMode.getHorizontalCount).toList();
       rowList.addAll(List.generate(rowCount.length, (index) => Container(
-        margin: const EdgeInsets.all(8),
-        width: 35,
-        height: 35,
+        margin: const EdgeInsets.all(6),
+        width: 40,
+        height: 40,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(50),color: rowCount[index]),
       ),));
       colList.add(Row(mainAxisAlignment:MainAxisAlignment.center,children: rowList,));
@@ -196,14 +216,15 @@ enum NumberMode{
 }
 
 extension NumberExt on NumberMode{
+  // 預設以呈現三行color ball來算
   int get getHorizontalCount {
     switch (this) {
       case NumberMode.n24:
-        return 6;
+        return 8;
       case NumberMode.n36:
-        return 9;
-      case NumberMode.n48:
         return 12;
+      case NumberMode.n48:
+        return 16;
       default:
         return 6;
     }
