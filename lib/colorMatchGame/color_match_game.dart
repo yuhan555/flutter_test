@@ -44,7 +44,7 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
           color: Colors.white,
           child: Column(
             children: [
-              Row(
+              Expanded(child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
@@ -71,55 +71,58 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                     ],
                   ),
                   Expanded(
-                    child: Column(
-                      children: const [
-                        Text('Time',style: TextStyle(fontSize: 30),textAlign:TextAlign.center,),
-                        Text('00:30',style: TextStyle(fontFamily: 'Rajdhani',fontSize: 65),textAlign:TextAlign.center),
-                        PrimaryButton(
-                          label: 'Restart',
-                        )
-                      ],
-                    )
+                      child: Column(
+                        children: const [
+                          Text('Time',style: TextStyle(fontSize: 30),textAlign:TextAlign.center,),
+                          Text('00:30',style: TextStyle(fontFamily: 'Rajdhani',fontSize: 65),textAlign:TextAlign.center),
+                          PrimaryButton(
+                            label: 'Restart',
+                          )
+                        ],
+                      )
                   )
                 ],
-              ),
+              ),),
               Expanded(
-                  child: Center(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: numberMode.getWidth,
-                          child: Wrap(
-                            spacing: 15, // 主轴(水平)方向间距
-                            runSpacing: 15, // 纵轴（垂直）方向间距
-                            children: [
-                              for(var c in colorListA)
-                                Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(50),color: c),
-                                ),
-                            ],
-                          ),
-                        ).addBottomMargin(60),
-                        SizedBox(
-                          width: numberMode.getWidth,
-                          child: Wrap(
-                            spacing: 15, // 主轴(水平)方向间距
-                            runSpacing: 15, // 纵轴（垂直）方向间距
-                            children: [
-                              for(var c in colorListB)
-                                Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(50),color: c),
-                                ),
-                            ],
-                          ),
-                        )
-
-                      ],
-                    ),
+                flex: 2,
+                  child: Container(
+                    padding: const EdgeInsets.all(30),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Expanded(child: Center(child: SizedBox(
+                            width: numberMode.getWidth,
+                            child: Wrap(
+                              spacing: 15, // 主轴(水平)方向间距
+                              runSpacing: 15, // 纵轴（垂直）方向间距
+                              children: [
+                                for(var c in colorListA)
+                                  Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(50),color: c),
+                                  ),
+                              ],
+                            ),
+                          ),)),
+                          Expanded(child: Center(child: SizedBox(
+                            width: numberMode.getWidth,
+                            child: Wrap(
+                              spacing: 15, // 主轴(水平)方向间距
+                              runSpacing: 15, // 纵轴（垂直）方向间距
+                              children: [
+                                for(var c in colorListB)
+                                  Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(50),color: c),
+                                  ),
+                              ],
+                            ),
+                          ),)),
+                        ],
+                      ),
+                    )
                   )
               )
             ],
@@ -189,18 +192,6 @@ enum Level{
  easy, medium, hard
 }
 
-extension StrToLevelExt on String {
-  // 將字串轉為等級enum
-  Level get toLevel{
-    return Level.values.firstWhere((elem) => elem.name == this, orElse: ()=> Level.easy);
-  }
-  // 將字串轉為數量enum
-  NumberMode get toNumberMode{
-    return NumberMode.values.firstWhere((element) => element.name == this,orElse: ()=> NumberMode.n24);
-  }
-
-}
-
 enum NumberMode{
   n24,n36,n48
 }
@@ -229,6 +220,18 @@ extension NumberExt on NumberMode{
       default:
         return 0;
     }
+  }
+
+}
+
+extension StrToLevelExt on String {
+  // 將字串轉為等級enum
+  Level get toLevel{
+    return Level.values.firstWhere((elem) => elem.name == this, orElse: ()=> Level.easy);
+  }
+  // 將字串轉為數量enum
+  NumberMode get toNumberMode{
+    return NumberMode.values.firstWhere((element) => element.name == this,orElse: ()=> NumberMode.n24);
   }
 
 }
