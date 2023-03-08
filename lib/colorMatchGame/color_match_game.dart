@@ -19,12 +19,16 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
   late List<Color> colorListB;
   late Level level;
   late NumberMode numberMode;
+  late String levelVal;
+  late String modeVal;
 
 
   @override
   void initState(){
     level = Level.easy;
-    numberMode = NumberMode.n48;
+    numberMode = NumberMode.n24;
+    levelVal = level.name;
+    modeVal = numberMode.name;
     initColor(level,numberMode);
     super.initState();
   }
@@ -54,9 +58,9 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                         radioLabel:'Level',
                         labelSize: 20,
                         opt: const [['Easy','easy'],['Medium','medium'],['Hard','hard']],
-                        val: level.name,
+                        val: levelVal,
                         optPressed: (v){
-                          level = v.toString().toLevel;
+                          levelVal = v;
                           setState(() {});
                         },
                       ).addBottomMargin(20),
@@ -64,9 +68,9 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                         radioLabel:'Number of Colors',
                         labelSize: 20,
                         opt: const [['24','n24'],['36','n36'],['48','n48']],
-                        val: numberMode.name,
+                        val: modeVal,
                         optPressed: (v){
-                          numberMode = v.toString().toNumberMode;
+                          modeVal = v;
                           setState(() {});
                         },
                       ),
@@ -74,11 +78,17 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                   ),
                   Expanded(
                       child: Column(
-                        children: const [
+                        children: [
                           Text('Time',style: TextStyle(fontSize: 30),textAlign:TextAlign.center,),
                           Text('00:30',style: TextStyle(fontFamily: 'Rajdhani',fontSize: 65),textAlign:TextAlign.center),
                           PrimaryButton(
                             label: 'Restart',
+                            onPressed: (){
+                              level = levelVal.toLevel;
+                              numberMode = modeVal.toNumberMode;
+                              initColor(level,numberMode);
+                              setState(() {});
+                            },
                           )
                         ],
                       )
