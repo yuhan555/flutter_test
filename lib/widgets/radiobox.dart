@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 //文字框版
 class RadioBox extends StatefulWidget {
   final String? radioLabel; //欄位標題文字
+  final double labelSize; //標題文字大小
   final bool hasLabel; //是否有標題文字，預設有
   final List opt;// 選項顯示文字及值，選項由左至右，ex：[['男','M'],['女','F']]
   final String? val; //欄位值
@@ -15,16 +16,17 @@ class RadioBox extends StatefulWidget {
 
   const RadioBox(
       {Key? key,
-      this.radioLabel,
-      this.hasLabel = true,
-      this.opt = const [],
-      this.val,
-      this.errMsg = '',
-      this.margin,
-      this.optPressed,
-      this.enabled=true,
-        this.radioWidth=160})
-      : super(key: key);
+        this.radioLabel,
+        this.hasLabel = true,
+        this.opt = const [],
+        this.val,
+        this.errMsg = '',
+        this.margin,
+        this.optPressed,
+        this.enabled=true,
+        this.radioWidth=160,
+        this.labelSize = 15,
+      }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -51,9 +53,9 @@ class RadioBoxState extends State<RadioBox> {
                   padding: const EdgeInsets.only(left: 5, bottom: 5),
                   child: Text(
                     widget.radioLabel!,
-                    style: const TextStyle(
-                      color: Color(0xff2d73a5),
-                      fontSize: 15,
+                    style: TextStyle(
+                      color: const Color(0xff2d73a5),
+                      fontSize: widget.labelSize,
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0,

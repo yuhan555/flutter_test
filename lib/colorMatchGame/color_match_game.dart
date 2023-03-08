@@ -24,7 +24,7 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
   @override
   void initState(){
     level = Level.easy;
-    numberMode = NumberMode.n24;
+    numberMode = NumberMode.n48;
     initColor(level,numberMode);
     super.initState();
   }
@@ -40,11 +40,11 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
       body: Container(
           width: cWidth,
           height: cHeight,
-          padding: const EdgeInsets.all(50),
+          padding: const EdgeInsets.all(40),
           color: Colors.white,
           child: Column(
             children: [
-              Expanded(child: Row(
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
@@ -52,15 +52,17 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                     children: [
                       RadioBox(
                         radioLabel:'Level',
+                        labelSize: 20,
                         opt: const [['Easy','easy'],['Medium','medium'],['Hard','hard']],
                         val: level.name,
                         optPressed: (v){
                           level = v.toString().toLevel;
                           setState(() {});
                         },
-                      ).addBottomMargin(40),
+                      ).addBottomMargin(20),
                       RadioBox(
                         radioLabel:'Number of Colors',
+                        labelSize: 20,
                         opt: const [['24','n24'],['36','n36'],['48','n48']],
                         val: numberMode.name,
                         optPressed: (v){
@@ -82,52 +84,39 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                       )
                   )
                 ],
-              ),),
+              ),
               Expanded(
                 flex: 2,
-                  child: Container(
-                    padding: const EdgeInsets.all(30),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Expanded(child: Center(child: SizedBox(
-                            width: numberMode.getWidth,
-                            child: Wrap(
-                              spacing: 15, // 主轴(水平)方向间距
-                              runSpacing: 15, // 纵轴（垂直）方向间距
-                              children: [
-                                for(var c in colorListA)
-                                  Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(50),color: c),
-                                  ),
-                              ],
-                            ),
-                          ),)),
-                          Expanded(child: Center(child: SizedBox(
-                            width: numberMode.getWidth,
-                            child: Wrap(
-                              spacing: 15, // 主轴(水平)方向间距
-                              runSpacing: 15, // 纵轴（垂直）方向间距
-                              children: [
-                                for(var c in colorListB)
-                                  Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(50),color: c),
-                                  ),
-                              ],
-                            ),
-                          ),)),
-                        ],
-                      ),
-                    )
-                  )
+                  child: Column(
+                    children: [
+                      Expanded(child: getList(colorListA)),
+                      Expanded(child: getList(colorListB)),
+                    ],
+                  ),
               )
             ],
           )
       ),
+    );
+  }
+
+  Widget getList(List<Color> colors){
+    List<Widget> colList = [];
+    for(var i = 0; i <= colors.length; i = i+numberMode.getHorizontalCount){
+      List<Widget> rowList = [];
+      if(i+numberMode.getHorizontalCount > colors.length) break;
+      List<Color> rowCount = colors.getRange(i, i+numberMode.getHorizontalCount).toList();
+      rowList.addAll(List.generate(rowCount.length, (index) => Container(
+        margin: const EdgeInsets.all(8),
+        width: 35,
+        height: 35,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(50),color: rowCount[index]),
+      ),));
+      colList.add(Row(mainAxisAlignment:MainAxisAlignment.center,children: rowList,));
+    }
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: colList,
     );
   }
 
@@ -197,15 +186,16 @@ enum NumberMode{
 }
 
 extension NumberExt on NumberMode{
-  double get getWidth {
+  int get getHorizontalCount {
     switch (this) {
       case NumberMode.n24:
-        return 650;
+        return 6;
       case NumberMode.n36:
+        return 9;
       case NumberMode.n48:
-        return 650;
+        return 12;
       default:
-        return 350;
+        return 6;
     }
   }
 
