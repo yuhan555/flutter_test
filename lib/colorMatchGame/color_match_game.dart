@@ -57,8 +57,7 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                     color: Colors.white,
                     child: Column(
                       children: [
-                        Expanded(
-                          child: Row(
+                        Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Column(
@@ -130,14 +129,14 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                               ],
                             ),),
                           ],
-                        )),
+                        ).addBottomMargin(20),
                         Expanded(
                           flex: 3,
                           child: Column(
                             children: [
                               Expanded(
                                   child: Container(
-                                      margin: EdgeInsets.all(10),
+                                      margin: const EdgeInsets.all(20),
                                       decoration: BoxDecoration(
                                           border:
                                           Border.all(color: Colors.black12),
@@ -158,7 +157,7 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                                       ))),
                               Expanded(
                                   child: Container(
-                                      margin: const EdgeInsets.all(10),
+                                      margin: const EdgeInsets.all(20),
                                       decoration: BoxDecoration(
                                           border:
                                           Border.all(color: Colors.black12),
