@@ -31,7 +31,7 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
     late int bColor;
     switch (level) {
       case Level.easy:
-        while (list.length < numberMode.getCount) {
+        while (list.length < numberMode.count) {
           rColor = random.nextInt(256);
           gColor = random.nextInt(256);
           bColor = random.nextInt(256);
@@ -48,7 +48,7 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
           random.nextInt(256)
         ];
         int mainC = random.nextInt(3); //一個主色，兩個變動色
-        while (list.length < numberMode.getCount) {
+        while (list.length < numberMode.count) {
           var colors = List.generate(3, (index) => index == mainC ? cList[mainC] : random.nextInt(256));
           ColorBallModel model = ColorBallModel(color: Color.fromRGBO(colors[0], colors[1], colors[2], 1));
           if (list.where((element) => element.color == model.color).isEmpty) {
@@ -65,7 +65,7 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
         int transIndex = random.nextInt(3); //兩個定色，一個變動色
         int transInt = cList[transIndex];
         bool down = false;
-        while (list.length < numberMode.getCount) {
+        while (list.length < numberMode.count) {
           //以自身為基準點，往上往下取
           if (down) {
             transInt = transInt - 5;
@@ -94,38 +94,28 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
 
 }
 
-enum Level { easy, medium, hard }
+enum Level {
+  easy(score: 1),
+  medium(score: 2),
+  hard(score: 3);
 
-enum NumberMode { n24, n36, n48 }
+  final int score;
 
-extension NumberExt on NumberMode {
-  // 預設以呈現三行color ball來算
-  int get getHorizontalCount {
-    switch (this) {
-      case NumberMode.n24:
-        return 8;
-      case NumberMode.n36:
-        return 12;
-      case NumberMode.n48:
-        return 16;
-      default:
-        return 6;
-    }
-  }
-
-  int get getCount {
-    switch (this) {
-      case NumberMode.n24:
-        return 24;
-      case NumberMode.n36:
-        return 36;
-      case NumberMode.n48:
-        return 48;
-      default:
-        return 0;
-    }
-  }
+  const Level({required this.score});
 }
+
+enum NumberMode {
+  // horizontalCount預設以呈現三行color ball來算
+  n24(horizontalCount: 8,count: 24),
+  n36(horizontalCount: 12,count: 36),
+  n48(horizontalCount: 16,count: 48);
+
+  final int horizontalCount;
+  final int count;
+
+  const NumberMode({required this.horizontalCount, required this.count});
+}
+
 
 extension StrToLevelExt on String {
   // 將字串轉為等級enum

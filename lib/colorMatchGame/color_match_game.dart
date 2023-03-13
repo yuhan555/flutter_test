@@ -191,10 +191,10 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
 
   Widget getList(List<ColorBallModel> colors, {bool drag = false}) {
     List<Widget> colList = [];
-    for (var i = 0; i <= colors.length; i = i + colorMatchBloc.numberMode.getHorizontalCount) {
+    for (var i = 0; i <= colors.length; i = i + colorMatchBloc.numberMode.horizontalCount) {
       List<Widget> rowList = [];
-      if (i + colorMatchBloc.numberMode.getHorizontalCount > colors.length) break;
-      List<ColorBallModel> rowCount = colors.getRange(i, i + colorMatchBloc.numberMode.getHorizontalCount).toList();
+      if (i + colorMatchBloc.numberMode.horizontalCount > colors.length) break;
+      List<ColorBallModel> rowCount = colors.getRange(i, i + colorMatchBloc.numberMode.horizontalCount).toList();
       rowList.addAll(List.generate(rowCount.length, (index) =>
           ColorBall(
             colorModel: rowCount[index],
