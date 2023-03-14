@@ -116,14 +116,14 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                             ),),
                             Expanded(child:Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text(
+                              children: [
+                                const Text(
                                   'Score',
                                   style: TextStyle(fontSize: 45),
                                   textAlign: TextAlign.center,
                                 ),
-                                Text('88888',
-                                    style: TextStyle(
+                                Text('${colorMatchBloc.score}',
+                                    style: const TextStyle(
                                         fontFamily: 'Rajdhani', fontSize: 80),
                                     textAlign: TextAlign.center),
                               ],
@@ -204,6 +204,9 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
               rowCount[index].visible = false;
               colorMatchBloc.add(Rebuild());
             },
+            onDraggableCanceled: (v,o){
+              colorMatchBloc.add(OnDragCancel());
+            },
             onWillAccept: (Color? color){
               rowCount[index].hover = true;
               colorMatchBloc.add(Rebuild());
@@ -211,7 +214,7 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
             },
             onAccept: (Color? color){
               rowCount[index].checked = true;
-              colorMatchBloc.add(Rebuild());
+              colorMatchBloc.add(OnAccept());
             },
             onLeave: (Color? color){
               rowCount[index].hover = false;

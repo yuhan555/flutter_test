@@ -5,3 +5,9 @@ abstract class ColorMatchEvent {}
 class InitData extends ColorMatchEvent{}
 
 class Rebuild extends ColorMatchEvent{}
+
+class OnAccept extends ColorMatchEvent{}
+
+class OnDragCancel extends ColorMatchEvent{}
+
+

@@ -14,6 +14,8 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
   ColorMatchBloc() : super(ColorMatchInitial()) {
     on<InitData>(_mapInitDataToState);
     on<Rebuild>((event, emit) => emit(RebuildState()));
+    on<OnAccept>(_mapOnAcceptToState);
+    on<OnDragCancel>(_mapOnDragCancelToState);
 
   }
 
@@ -22,6 +24,10 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
   List<ColorBallModel> targetList = [];
   Level level = Level.easy;
   NumberMode numberMode = NumberMode.n24;
+  late int scoreRange;
+  int score = 0;
+
+
 
 
   void _mapInitDataToState(InitData event, Emitter emit){
@@ -47,7 +53,7 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
           random.nextInt(256),
           random.nextInt(256)
         ];
-        int mainC = random.nextInt(3); //一個主色，兩個變動色
+        int mainC = random.nextInt(3); //一個定色，兩個變動色
         while (list.length < numberMode.count) {
           var colors = List.generate(3, (index) => index == mainC ? cList[mainC] : random.nextInt(256));
           ColorBallModel model = ColorBallModel(color: Color.fromRGBO(colors[0], colors[1], colors[2], 1));
@@ -71,7 +77,7 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
             transInt = transInt - 5;
           } else {
             transInt = transInt + 5;
-            down = transInt > 255;
+            down = transInt > 255; //往上取超過255，改為往下取
             if(down){
               transInt = cList[transIndex];
               continue;
@@ -88,7 +94,21 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
     }
     dragList = list.toList().shuffled();
     targetList = list.map((e) => e.copyWith()).shuffled();
+
+    scoreRange = level.score;
+    score = 0;
     emit(InitSuccess());
+  }
+
+  void _mapOnAcceptToState(OnAccept event, Emitter emit){
+    score += scoreRange;
+    scoreRange += level.score;
+    emit(RebuildState());
+  }
+
+  void _mapOnDragCancelToState(OnDragCancel event, Emitter emit){
+    scoreRange = level.score;
+    emit(RebuildState());
   }
 
 

@@ -6,9 +6,12 @@ class ColorBall<T extends Object> extends StatefulWidget {
   final bool drag;
   final Color? data;
   final VoidCallback? onDragCompleted;
+  final DraggableCanceledCallback? onDraggableCanceled;
   final DragTargetWillAccept<Color>? onWillAccept;
   final DragTargetAccept<Color>? onAccept;
   final DragTargetLeave<Color>? onLeave;
+
+
 
 
   const ColorBall({
@@ -18,6 +21,7 @@ class ColorBall<T extends Object> extends StatefulWidget {
     this.data,
     this.onAccept,
     this.onDragCompleted,
+    this.onDraggableCanceled,
     this.onLeave,
     this.onWillAccept,
   }) : super(key: key);
@@ -35,6 +39,7 @@ class _ColorBallState extends State<ColorBall> {
         childWhenDragging: colorBall(widget.colorModel),
         data: widget.data,
         onDragCompleted: widget.onDragCompleted,
+        onDraggableCanceled: widget.onDraggableCanceled,
         child: colorBall(widget.colorModel),
       );
     } else {
