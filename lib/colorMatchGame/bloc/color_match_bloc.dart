@@ -26,6 +26,7 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
   NumberMode numberMode = NumberMode.n24;
   late int scoreRange;
   int score = 0;
+  bool over = false;
 
 
 
@@ -94,7 +95,7 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
     }
     dragList = list.toList().shuffled();
     targetList = list.map((e) => e.copyWith()).shuffled();
-
+    over = false;
     scoreRange = level.score;
     score = 0;
     emit(InitSuccess());

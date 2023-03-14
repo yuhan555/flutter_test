@@ -10,6 +10,7 @@ class ColorBall<T extends Object> extends StatefulWidget {
   final DragTargetWillAccept<Color>? onWillAccept;
   final DragTargetAccept<Color>? onAccept;
   final DragTargetLeave<Color>? onLeave;
+  final bool disabledDrag;
 
 
 
@@ -24,6 +25,7 @@ class ColorBall<T extends Object> extends StatefulWidget {
     this.onDraggableCanceled,
     this.onLeave,
     this.onWillAccept,
+    this.disabledDrag = false,
   }) : super(key: key);
 
   @override
@@ -40,6 +42,7 @@ class _ColorBallState extends State<ColorBall> {
         data: widget.data,
         onDragCompleted: widget.onDragCompleted,
         onDraggableCanceled: widget.onDraggableCanceled,
+        maxSimultaneousDrags: widget.disabledDrag ? 0 : null, //禁止拖動
         child: colorBall(widget.colorModel),
       );
     } else {

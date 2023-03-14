@@ -200,6 +200,7 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
             colorModel: rowCount[index],
             drag: drag,
             data: rowCount[index].color,
+            disabledDrag: colorMatchBloc.over,
             onDragCompleted: (){
               rowCount[index].visible = false;
               colorMatchBloc.add(Rebuild());
