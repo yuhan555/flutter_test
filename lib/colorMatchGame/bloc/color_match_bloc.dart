@@ -27,6 +27,8 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
   late int scoreRange;
   int score = 0;
   bool over = false;
+  late int time;
+
 
 
 
@@ -98,6 +100,7 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
     over = false;
     scoreRange = level.score;
     score = 0;
+    time = numberMode.seconds + level.timePlus;
     emit(InitSuccess());
   }
 
@@ -116,25 +119,27 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
 }
 
 enum Level {
-  easy(score: 1),
-  medium(score: 2),
-  hard(score: 3);
+  easy(score: 1,timePlus: 0),
+  medium(score: 2, timePlus: 30),
+  hard(score: 3,timePlus: 60);
 
   final int score;
+  final int timePlus;
 
-  const Level({required this.score});
+  const Level({required this.score, required this.timePlus});
 }
 
 enum NumberMode {
   // horizontalCount預設以呈現三行color ball來算
-  n24(horizontalCount: 8,count: 24),
-  n36(horizontalCount: 12,count: 36),
-  n48(horizontalCount: 16,count: 48);
+  n24(horizontalCount: 8,count: 24, seconds: 60),
+  n36(horizontalCount: 12,count: 36, seconds: 90),
+  n48(horizontalCount: 16,count: 48, seconds: 120);
 
   final int horizontalCount;
   final int count;
+  final int seconds;
 
-  const NumberMode({required this.horizontalCount, required this.count});
+  const NumberMode({required this.horizontalCount, required this.count,required this.seconds});
 }
 
 

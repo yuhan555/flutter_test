@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ffi';
 import 'dart:math';
 
@@ -23,6 +24,7 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
 
   late String levelVal;
   late String modeVal;
+  Timer? timer;
 
   @override
   void initState() {
@@ -31,6 +33,23 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
     colorMatchBloc.add(InitData());
     super.initState();
   }
+
+  void startTimer(){
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if(colorMatchBloc.time==0){
+        cancelTimer();
+      }else{
+        colorMatchBloc.time--;
+      }
+      setState(() {});
+    });
+  }
+
+  void cancelTimer(){
+    timer?.cancel();
+    timer = null;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +62,12 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
         create: (context) => colorMatchBloc,
         child: BlocListener<ColorMatchBloc, ColorMatchState>(
           listener: (context, state) {
-            // TODO: implement listener}
+            if(state is InitSuccess){
+              cancelTimer();
+              Future.delayed(const Duration(seconds: 1),(){
+                startTimer();
+              });
+            }
           },
           child: BlocBuilder<ColorMatchBloc, ColorMatchState>(
             builder: (context, state) {
@@ -93,15 +117,16 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                                 ),
                               ],
                             ),
-                            Expanded(child: Column(
+                            Expanded(
+                              child: Column(
                               children: [
                                 const Text(
                                   'Time',
                                   style: TextStyle(fontSize: 30),
                                   textAlign: TextAlign.center,
                                 ),
-                                const Text('00:30',
-                                    style: TextStyle(
+                                Text('${(colorMatchBloc.time/60).floor().toString().padLeft(2,'0')}:${(colorMatchBloc.time%60).toString().padLeft(2,'0')}',
+                                    style: const TextStyle(
                                         fontFamily: 'Rajdhani', fontSize: 55),
                                     textAlign: TextAlign.center),
                                 PrimaryButton(
@@ -231,6 +256,12 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: colList,
     );
+  }
+
+  @override
+  void dispose() {
+    timer = null;
+    super.dispose();
   }
 
 }
