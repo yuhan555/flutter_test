@@ -38,6 +38,8 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if(colorMatchBloc.time==0){
         cancelTimer();
+        colorMatchBloc.disabledDrag = true;
+        colorMatchBloc.add(Timeout());
       }else{
         colorMatchBloc.time--;
       }
@@ -48,6 +50,15 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
   void cancelTimer(){
     timer?.cancel();
     timer = null;
+  }
+
+  void showAppDialog(BuildContext context, Widget dialog, {bool barrierDismissible = false}) {
+    showDialog(
+      barrierDismissible: barrierDismissible, //点击遮罩不关闭对话框
+      context: context,
+      builder: (context) {
+        return dialog;
+      });
   }
 
 
@@ -61,12 +72,46 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
       body: BlocProvider<ColorMatchBloc>(
         create: (context) => colorMatchBloc,
         child: BlocListener<ColorMatchBloc, ColorMatchState>(
-          listener: (context, state) {
+          listener: (context, state){
             if(state is InitSuccess){
-              cancelTimer();
               Future.delayed(const Duration(seconds: 1),(){
                 startTimer();
               });
+            }else if(state is AcceptState){
+              if(colorMatchBloc.match == colorMatchBloc.numberMode.count){
+                cancelTimer();
+                Future.delayed(Duration(seconds: 1),(){
+                  colorMatchBloc.add(Bonus());
+                });
+              }
+            }else if(state is BonusState){
+              Future.delayed(Duration(seconds: 1),(){
+                colorMatchBloc.add(Finish());
+              });
+            }else if(state is RestartState){
+              showAppDialog(context,
+                AlertDialog(
+                  // contentPadding: EdgeInsets.zero,
+                  // titlePadding: EdgeInsets.zero,
+                  // insetPadding: EdgeInsets.zero,
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(state.finish ? "Well done" : "Time's up",style: const TextStyle(
+                          fontFamily: 'Rajdhani', fontSize: 40)),
+                      Text('Score ${colorMatchBloc.score}',
+                          style: const TextStyle(
+                              fontFamily: 'Rajdhani', fontSize: 80),
+                          textAlign: TextAlign.center),
+                      PrimaryButton(
+                        label: 'OK',
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  ),
+                ),);
             }
           },
           child: BlocBuilder<ColorMatchBloc, ColorMatchState>(
@@ -132,6 +177,7 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                                 PrimaryButton(
                                   label: 'Restart',
                                   onPressed: () {
+                                    cancelTimer();
                                     colorMatchBloc.level = levelVal.toLevel;
                                     colorMatchBloc.numberMode = modeVal.toNumberMode;
                                     colorMatchBloc.add(InitData());
@@ -225,7 +271,7 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
             colorModel: rowCount[index],
             drag: drag,
             data: rowCount[index].color,
-            disabledDrag: colorMatchBloc.over,
+            disabledDrag: colorMatchBloc.disabledDrag,
             onDragCompleted: (){
               rowCount[index].visible = false;
               colorMatchBloc.add(Rebuild());

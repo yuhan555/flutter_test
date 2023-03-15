@@ -10,15 +10,6 @@ part 'color_match_event.dart';
 part 'color_match_state.dart';
 
 class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
-
-  ColorMatchBloc() : super(ColorMatchInitial()) {
-    on<InitData>(_mapInitDataToState);
-    on<Rebuild>((event, emit) => emit(RebuildState()));
-    on<OnAccept>(_mapOnAcceptToState);
-    on<OnDragCancel>(_mapOnDragCancelToState);
-
-  }
-
   final Random random = Random();
   List<ColorBallModel> dragList = [];
   List<ColorBallModel> targetList = [];
@@ -26,8 +17,21 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
   NumberMode numberMode = NumberMode.n24;
   late int scoreRange;
   int score = 0;
-  bool over = false;
+  bool disabledDrag = false;
   late int time;
+  int match = 0; //答對個數
+
+
+  ColorMatchBloc() : super(ColorMatchInitial()) {
+    on<InitData>(_mapInitDataToState);
+    on<Rebuild>((event,emit) => emit(RebuildState()));
+    on<OnAccept>(_mapOnAcceptToState);
+    on<OnDragCancel>(_mapOnDragCancelToState);
+    on<Timeout>((event,emit) => emit(RestartState()));
+    on<Bonus>(_mapBonusToState);
+    on<Finish>((event, emit) => emit(RestartState(finish: true)));
+
+  }
 
 
 
@@ -97,23 +101,32 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
     }
     dragList = list.toList().shuffled();
     targetList = list.map((e) => e.copyWith()).shuffled();
-    over = false;
+    disabledDrag = false;
     scoreRange = level.score;
     score = 0;
+    match = 0;
     time = numberMode.seconds + level.timePlus;
     emit(InitSuccess());
   }
 
-  void _mapOnAcceptToState(OnAccept event, Emitter emit){
+  void _mapOnAcceptToState(OnAccept event, Emitter emit) async{
     score += scoreRange;
     scoreRange += level.score;
-    emit(RebuildState());
+    match += 1;
+    emit(AcceptState());
   }
 
   void _mapOnDragCancelToState(OnDragCancel event, Emitter emit){
     scoreRange = level.score;
     emit(RebuildState());
   }
+
+  void _mapBonusToState(Bonus event, Emitter emit){
+    score += 100;
+    emit(BonusState());
+  }
+
+
 
 
 }
