@@ -16,17 +16,16 @@ class AppTableWidget extends StatefulWidget {
     bool canScroll; ///可否左右滑動(若為true，則所有TableWidgetModel皆須給寬)
     double? contentHeight; ///若有高度表頭固定，內容可滑動
 
-    AppTableWidget(
-        {
-            this.headerList,
-            this.contentList,
-            this.footerList,
-            this.headerBgColor = AppColors.fadedBlue,
-            this.contentOddBgColor = AppColors.white,
-            this.contentEvenBgColor = AppColors.offWhiteTwo,
-            this.canScroll = false,
-            this.contentHeight,
-        }) : super();
+    AppTableWidget({
+        this.headerList,
+        this.contentList,
+        this.footerList,
+        this.headerBgColor = AppColors.fadedBlue,
+        this.contentOddBgColor = AppColors.white,
+        this.contentEvenBgColor = AppColors.offWhiteTwo,
+        this.canScroll = false,
+        this.contentHeight,
+    }) : super();
 
     @override
     State createState() => _AppTableWidgetState();
@@ -139,8 +138,7 @@ class TableWidgetModel {
 }
 
 class AppTableWidgetCommon {
-    Widget getCell(TableWidgetModel model,Color bgColor)
-    {
+    Widget getCell(TableWidgetModel model,Color bgColor) {
         return Container(
             width: model.cellWidth,
             padding: model.widgetType==TableWidgetType.richTextType ? EdgeInsets.zero : model.padding,
@@ -153,10 +151,8 @@ class AppTableWidgetCommon {
         );
     }
 
-    Widget checkWidgetType(TableWidgetModel model)
-    {
-        switch(model.widgetType)
-        {
+    Widget checkWidgetType(TableWidgetModel model) {
+        switch(model.widgetType) {
             case TableWidgetType.textType:
                 return getText(model);
             case TableWidgetType.buttonType:
@@ -176,15 +172,15 @@ class AppTableWidgetCommon {
         }
     }
 
-    Widget getText(TableWidgetModel model)
-    {
+    Widget getText(TableWidgetModel model) {
         Widget textWidget = Text(
             model.title,
             style: AppTextStyle(
             decoration: model.textDecoration,
             fontWeight:model.isBold ? FontWeight.bold:FontWeight.normal ,
             fontSize: model.fontSize,
-            color: model.textColor),);
+            color: model.textColor),
+        );
 
         if(model.textFittedBox) {
             textWidget = FittedBox(fit: BoxFit.fitWidth,child: textWidget);
@@ -196,11 +192,10 @@ class AppTableWidgetCommon {
             child: GestureDetector(
                 onTap: model.onTap!,
                 child: textWidget,
-            ));
+        ));
     }
 
-    Widget getButton(TableWidgetModel model)
-    {
+    Widget getButton(TableWidgetModel model) {
         return Container(
             height: model.cellHeight,
             alignment: model.alignment,
@@ -215,9 +210,8 @@ class AppTableWidgetCommon {
         );
     }
 
-    Widget getRichText(TableWidgetModel model)
-    {
-        List textList = model.title.indexOf(',') >-1 ? model.title.split(',') : [];
+    Widget getRichText(TableWidgetModel model) {
+        List textList = model.title.indexOf(',') > -1 ? model.title.split(',') : [];
         return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -239,8 +233,7 @@ class AppTableWidgetCommon {
         );
     }
 
-    Widget getTextIcon(TableWidgetModel model)
-    {
+    Widget getTextIcon(TableWidgetModel model) {
         return Container(
             height: model.cellHeight,
             alignment: model.alignment,
@@ -275,8 +268,7 @@ class AppTableWidgetCommon {
             ));
     }
 
-    Widget getCheckBox(TableWidgetModel model)
-    {
+    Widget getCheckBox(TableWidgetModel model) {
         return Container(
             height: model.cellHeight,
             alignment: model.alignment,
@@ -287,8 +279,7 @@ class AppTableWidgetCommon {
         );
     }
 
-    Widget getCheckIcon(TableWidgetModel model)
-    {
+    Widget getCheckIcon(TableWidgetModel model) {
         return Container(
             height: model.cellHeight,
             alignment: model.alignment,
@@ -303,8 +294,7 @@ class AppTableWidgetCommon {
         );
     }
 
-    Widget getRadioBox(TableWidgetModel model)
-    {
+    Widget getRadioBox(TableWidgetModel model) {
         return Container(
             height: model.cellHeight,
             alignment: model.alignment,
@@ -318,8 +308,7 @@ class AppTableWidgetCommon {
 
 
 }
-enum TableWidgetType
-{
+enum TableWidgetType {
     textType,
     buttonType,
     richTextType,
@@ -328,6 +317,7 @@ enum TableWidgetType
     radioBox,
     checkIcon,
 }
+
 enum SortType {
     none, //沒有
     asc, //正序
