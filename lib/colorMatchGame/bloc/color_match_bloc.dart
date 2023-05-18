@@ -122,6 +122,7 @@ class ColorMatchBloc extends Bloc<ColorMatchEvent, ColorMatchState> {
   }
 
   void _mapBonusToState(Bonus event, Emitter emit){
+    scoreRange = 100;
     score += 100;
     emit(BonusState());
   }

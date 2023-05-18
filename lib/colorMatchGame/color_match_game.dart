@@ -1,8 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
-import 'dart:math';
-
-import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_test/colorMatchGame/bloc/color_match_bloc.dart';
@@ -19,17 +15,34 @@ class ColorMatchGame extends StatefulWidget {
   State<ColorMatchGame> createState() => _ColorMatchGameState();
 }
 
-class _ColorMatchGameState extends State<ColorMatchGame> {
+class _ColorMatchGameState extends State<ColorMatchGame> with TickerProviderStateMixin{
   final ColorMatchBloc colorMatchBloc = ColorMatchBloc();
 
   late String levelVal;
   late String modeVal;
   Timer? timer;
 
+  // 動畫
+  late AnimationController controller;
+  late AnimationController scaleController;
+  late Animation<Offset> offsetAnimation;
+  late Animation<double> fadeAnimation;
   @override
   void initState() {
     levelVal = colorMatchBloc.level.name;
     modeVal = colorMatchBloc.numberMode.name;
+    controller = AnimationController(duration: const Duration(milliseconds: 1300), vsync: this)..addStatusListener((status) {
+      if (status == AnimationStatus.completed){
+        // 動畫完成後重新reset
+        controller.reset();
+        scaleController.reset();
+      }
+    });
+    CurvedAnimation cure = CurvedAnimation(parent: controller, curve: Curves.decelerate); //定義動畫曲線
+    scaleController = AnimationController(duration: const Duration(milliseconds: 10), vsync: this);
+    // 移動和淡出用同一個controller控制
+    offsetAnimation = Tween(begin: const Offset(0.0, 0.4), end: Offset.zero).animate(cure);
+    fadeAnimation = Tween(begin: 1.0, end: 0.0).animate(cure);
     colorMatchBloc.add(InitData());
     super.initState();
   }
@@ -78,14 +91,19 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                 startTimer();
               });
             }else if(state is AcceptState){
+              // 啟動動畫
+              controller.forward();
+              scaleController.forward();
               if(colorMatchBloc.match == colorMatchBloc.numberMode.count){
                 cancelTimer();
-                Future.delayed(Duration(seconds: 1),(){
+                Future.delayed(const Duration(seconds: 1),(){
                   colorMatchBloc.add(Bonus());
                 });
               }
             }else if(state is BonusState){
-              Future.delayed(Duration(seconds: 1),(){
+              controller.forward();
+              scaleController.forward();
+              Future.delayed(const Duration(seconds: 2),(){
                 colorMatchBloc.add(Finish());
               });
             }else if(state is RestartState){
@@ -128,6 +146,7 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,8 +181,7 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                                 ),
                               ],
                             ),
-                            Expanded(
-                              child: Column(
+                            Column(
                               children: [
                                 const Text(
                                   'Time',
@@ -184,21 +202,41 @@ class _ColorMatchGameState extends State<ColorMatchGame> {
                                   },
                                 )
                               ],
-                            ),),
-                            Expanded(child:Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            ),
+                            Column(
                               children: [
                                 const Text(
                                   'Score',
-                                  style: TextStyle(fontSize: 45),
+                                  style: TextStyle(fontSize: 40),
                                   textAlign: TextAlign.center,
                                 ),
-                                Text('${colorMatchBloc.score}',
-                                    style: const TextStyle(
-                                        fontFamily: 'Rajdhani', fontSize: 80),
-                                    textAlign: TextAlign.center),
+                                Stack(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 60),
+                                      child: Text('${colorMatchBloc.score}',
+                                          style: const TextStyle(
+                                              fontFamily: 'Rajdhani', fontSize: 70),
+                                          textAlign: TextAlign.center),
+                                    ),
+                                  Positioned(
+                                      top: 0,
+                                      right:0,
+                                      child: SlideTransition(
+                                        position: offsetAnimation,
+                                        child: FadeTransition(
+                                          opacity: fadeAnimation,
+                                          child: ScaleTransition(
+                                            scale: scaleController,
+                                            child: Text('+${colorMatchBloc.scoreRange}',style: const TextStyle(
+                                                fontFamily: 'Rajdhani', fontSize: 45,color:Colors.deepOrangeAccent)),
+                                          )
+                                        ))
+                                    )
+                                  ],
+                                )
                               ],
-                            ),),
+                            ),
                           ],
                         ).addBottomMargin(20),
                         Expanded(
